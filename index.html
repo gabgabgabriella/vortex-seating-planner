@@ -12,160 +12,239 @@
     background: #0f172a;
     color: #e2e8f0;
     min-height: 100vh;
-    padding: 16px;
     -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
   }
 
-  h1 {
-    text-align: center;
-    font-size: clamp(1.2rem, 4vw, 1.7rem);
-    color: #f8fafc;
-    margin-bottom: 4px;
-    letter-spacing: 1px;
-  }
+  /* ═══════════════════════════════════════════
+     PAGE SYSTEM
+  ═══════════════════════════════════════════ */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; animation: fadeIn 0.18s ease; }
 
-  .subtitle {
-    text-align: center;
-    color: #94a3b8;
-    font-size: clamp(0.72rem, 2.5vw, 0.82rem);
-    margin-bottom: 16px;
-    line-height: 1.6;
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: translateX(0); } }
 
-  /* ── Layout ── */
-  .layout {
-    display: grid;
-    grid-template-columns: 270px 1fr 270px;
-    gap: 14px;
-    align-items: start;
-  }
-
-  /* ── Panel ── */
-  .panel {
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 14px;
-    border: 1px solid #334155;
-  }
-
-  .panel-title {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #cbd5e1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  /* ── Roster gender stat bar ── */
-  .roster-top { margin-bottom: 10px; }
-
-  .roster-title-row {
+  /* ═══════════════════════════════════════════
+     SHARED COMPONENTS
+  ═══════════════════════════════════════════ */
+  .top-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
-  }
-
-  .gender-stat-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 6px;
-  }
-
-  .gsb-cell {
+    padding: 14px 16px 10px;
+    border-bottom: 1px solid #1e293b;
+    position: sticky;
+    top: 0;
     background: #0f172a;
-    border-radius: 8px;
-    padding: 7px 6px;
-    text-align: center;
-    border: 1px solid #334155;
+    z-index: 50;
   }
 
-  .gsb-cell.male   { border-color: #1e40af; }
-  .gsb-cell.female { border-color: #831843; }
-
-  .gsb-val { font-size: 1.3rem; font-weight: 700; line-height: 1; }
-  .gsb-cell.male   .gsb-val { color: #60a5fa; }
-  .gsb-cell.female .gsb-val { color: #f472b6; }
-  .gsb-cell.total  .gsb-val { color: #e2e8f0; }
-  .gsb-lbl { font-size: 0.62rem; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
-
-  /* ── Add form ── */
-  .add-paddler {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #334155;
+  .top-bar-title {
+    font-size: clamp(1.1rem, 4vw, 1.5rem);
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: 0.5px;
   }
 
-  .add-paddler input,
-  .add-paddler select {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 7px;
-    color: #f1f5f9;
-    padding: 9px 10px;
-    font-size: 0.85rem;
-    outline: none;
-    width: 100%;
+  .top-bar-sub {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 1px;
   }
 
-  .add-paddler input:focus,
-  .add-paddler select:focus { border-color: #60a5fa; }
-  .add-paddler input::placeholder { color: #475569; }
-  .add-paddler select option { background: #1e293b; }
-
-  .pos-checkboxes { display: flex; gap: 10px; flex-wrap: wrap; padding: 2px 0; }
-
-  .pos-check {
+  .btn-back {
     display: flex; align-items: center; gap: 5px;
-    font-size: 0.8rem; color: #94a3b8; cursor: pointer;
-    user-select: none; min-height: 28px;
+    background: #1e293b; border: 1px solid #334155; border-radius: 8px;
+    color: #94a3b8; font-size: 0.82rem; font-weight: 600;
+    padding: 7px 12px; cursor: pointer; white-space: nowrap;
+    touch-action: manipulation;
   }
 
-  .pos-check input[type=checkbox] { accent-color: #6366f1; width: 15px; height: 15px; cursor: pointer; }
-  .pos-hint { font-size: 0.68rem; color: #475569; margin-top: -3px; }
+  .btn-back:active { background: #334155; }
+
+  .btn-roster-manage {
+    display: flex; align-items: center; gap: 5px;
+    background: #1e3a5f; border: 1px solid #1e40af; border-radius: 8px;
+    color: #93c5fd; font-size: 0.78rem; font-weight: 600;
+    padding: 7px 12px; cursor: pointer; white-space: nowrap;
+    touch-action: manipulation;
+  }
+
+  .btn-roster-manage:active { background: #1e40af; }
 
   /* ── Buttons ── */
   .btn {
     background: #2563eb; color: #fff; border: none; border-radius: 8px;
-    padding: 10px 14px; font-size: 0.85rem; cursor: pointer; font-weight: 600;
+    padding: 11px 16px; font-size: 0.88rem; cursor: pointer; font-weight: 600;
     transition: background 0.15s; white-space: nowrap; touch-action: manipulation;
+    width: 100%;
   }
-
   .btn:hover  { background: #1d4ed8; }
   .btn:active { background: #1e40af; }
 
-  .btn-danger { background: #dc2626; font-size: 0.72rem; padding: 5px 9px; border-radius: 6px; }
-  .btn-danger:hover  { background: #b91c1c; }
+  .btn-outline {
+    background: transparent; color: #94a3b8;
+    border: 1px solid #334155; border-radius: 8px;
+    padding: 10px 16px; font-size: 0.85rem; cursor: pointer; font-weight: 500;
+    touch-action: manipulation; width: 100%;
+  }
+  .btn-outline:active { background: #1e293b; }
 
-  .btn-sm { background: #334155; font-size: 0.72rem; padding: 6px 10px; border-radius: 6px; }
-  .btn-sm:hover { background: #475569; }
+  .btn-danger-full {
+    background: #7f1d1d; color: #fca5a5; border: 1px solid #991b1b;
+    border-radius: 8px; padding: 10px 16px; font-size: 0.85rem;
+    cursor: pointer; font-weight: 600; touch-action: manipulation; width: 100%;
+  }
+  .btn-danger-full:active { background: #450a0a; }
 
-  /* ── Roster list ── */
-  .roster-list {
+  .btn-sm { background: #334155; color: #e2e8f0; border: none; border-radius: 6px;
+    font-size: 0.72rem; padding: 6px 10px; cursor: pointer; font-weight: 600; touch-action: manipulation; }
+  .btn-sm:active { background: #475569; }
+
+  .icon-btn {
+    background: #1e293b; border: 1px solid #334155; border-radius: 7px;
+    color: #94a3b8; width: 32px; height: 32px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.82rem; flex-shrink: 0; touch-action: manipulation;
+  }
+  .icon-btn:active { background: #334155; }
+  .icon-btn.edit  { color: #60a5fa; border-color: #1e40af; background: #0f172a; }
+  .icon-btn.del   { color: #f87171; border-color: #7f1d1d; background: #0f172a; }
+  .icon-btn.edit:active { background: #1e3a5f; }
+  .icon-btn.del:active  { background: #450a0a; }
+
+  /* ── Form fields ── */
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+
+  .field-label {
+    font-size: 0.72rem; color: #64748b; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.4px;
+  }
+
+  .field-input {
+    background: #0f172a; border: 1px solid #334155; border-radius: 9px;
+    color: #f1f5f9; padding: 11px 13px; font-size: 0.9rem; outline: none; width: 100%;
+  }
+  .field-input:focus  { border-color: #60a5fa; }
+  .field-input::placeholder { color: #475569; }
+  .field-input option { background: #1e293b; }
+
+  .pos-checkboxes { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  .pos-check {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 0.82rem; color: #94a3b8; cursor: pointer; user-select: none;
+    background: #0f172a; border: 1px solid #334155; border-radius: 7px;
+    padding: 7px 10px; flex: 1; justify-content: center;
+    touch-action: manipulation;
+  }
+  .pos-check input { accent-color: #6366f1; width: 14px; height: 14px; cursor: pointer; }
+  .pos-check:has(input:checked) { border-color: #6366f1; background: #1e1b4b; }
+
+  .pos-hint { font-size: 0.68rem; color: #475569; }
+
+  /* ── Badges ── */
+  .pos-badge { font-size: 0.6rem; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
+  .pos-badge.L { background: #1e3a5f; color: #93c5fd; }
+  .pos-badge.R { background: #4a044e; color: #f9a8d4; }
+  .pos-badge.S { background: #2e1065; color: #c4b5fd; }
+
+  .gender-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; display: inline-block; }
+  .gender-dot.m { background: #3b82f6; }
+  .gender-dot.f { background: #ec4899; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed; bottom: 20px; left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: #1e293b; color: #e2e8f0;
+    border: 1px solid #334155; border-radius: 10px;
+    padding: 10px 20px; font-size: 0.82rem; font-weight: 600;
+    pointer-events: none;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+    opacity: 0; z-index: 9998; text-align: center;
+    max-width: calc(100vw - 32px);
+  }
+  #toast.show  { transform: translateX(-50%) translateY(0); opacity: 1; }
+  #toast.error { background: #7f1d1d; color: #fca5a5; border-color: #dc2626; }
+  #toast.success { background: #14532d; color: #4ade80; border-color: #16a34a; }
+
+  /* ═══════════════════════════════════════════
+     PAGE 1 — SEATING PLANNER
+  ═══════════════════════════════════════════ */
+  #page-planner { padding: 0; }
+
+  .planner-header { padding: 14px 16px 8px; }
+
+  .planner-title {
+    font-size: clamp(1.2rem, 4vw, 1.7rem);
+    font-weight: 800; color: #f8fafc; letter-spacing: 0.5px; text-align: center;
+  }
+
+  .planner-subtitle {
+    text-align: center; color: #64748b;
+    font-size: clamp(0.7rem, 2.2vw, 0.8rem);
+    margin-top: 4px; line-height: 1.5;
+  }
+
+  /* ── 3-col layout ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 270px 1fr 270px;
+    gap: 14px;
+    padding: 12px 16px 20px;
+    align-items: start;
+  }
+
+  /* ── Roster panel (left col) ── */
+  .roster-panel {
+    background: #1e293b; border-radius: 12px;
+    padding: 14px; border: 1px solid #334155;
+  }
+
+  .roster-panel-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .roster-panel-title {
+    font-size: 0.82rem; font-weight: 700; color: #cbd5e1;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+
+  /* ── Gender stat bar ── */
+  .gender-stat-bar {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 10px;
+  }
+
+  .gsb-cell {
+    background: #0f172a; border-radius: 8px; padding: 7px 6px;
+    text-align: center; border: 1px solid #334155;
+  }
+  .gsb-cell.male   { border-color: #1e40af; }
+  .gsb-cell.female { border-color: #831843; }
+  .gsb-val { font-size: 1.3rem; font-weight: 700; line-height: 1; }
+  .gsb-cell.male   .gsb-val { color: #60a5fa; }
+  .gsb-cell.female .gsb-val { color: #f472b6; }
+  .gsb-cell.total  .gsb-val { color: #e2e8f0; }
+  .gsb-lbl { font-size: 0.62rem; color: #64748b; margin-top: 2px; text-transform: uppercase; }
+
+  /* ── Paddler chips (main page) ── */
+  .roster-chips {
     display: flex; flex-direction: column; gap: 5px;
-    max-height: 440px; overflow-y: auto; padding-right: 2px;
+    max-height: 420px; overflow-y: auto; padding-right: 2px;
     -webkit-overflow-scrolling: touch;
   }
+  .roster-chips::-webkit-scrollbar { width: 4px; }
+  .roster-chips::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
 
-  .roster-list::-webkit-scrollbar { width: 4px; }
-  .roster-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
-
-  /* ── Paddler chip ── */
   .paddler-chip {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-left: 3px solid #334155;
-    border-radius: 8px;
+    background: #0f172a; border: 1px solid #334155;
+    border-left: 3px solid #334155; border-radius: 8px;
     padding: 8px 8px 8px 10px;
     display: flex; align-items: center; justify-content: space-between; gap: 6px;
-    cursor: grab;
-    transition: border-color 0.15s, opacity 0.15s;
-    user-select: none;
+    cursor: grab; transition: border-color 0.15s, opacity 0.15s; user-select: none;
   }
-
   .paddler-chip:active  { cursor: grabbing; }
   .paddler-chip.dragging { opacity: 0.3; }
   .paddler-chip.seated  { border-color: #16a34a; border-left-color: #16a34a; background: #052e16; }
@@ -180,15 +259,6 @@
   .chip-bottom { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
   .chip-wt    { font-size: 0.72rem; color: #64748b; }
   .chip-seated-label { font-size: 0.65rem; color: #4ade80; }
-
-  .gender-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .gender-dot.m { background: #3b82f6; }
-  .gender-dot.f { background: #ec4899; }
-
-  .pos-badge { font-size: 0.6rem; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
-  .pos-badge.L { background: #1e3a5f; color: #93c5fd; }
-  .pos-badge.R { background: #4a044e; color: #f9a8d4; }
-  .pos-badge.S { background: #2e1065; color: #c4b5fd; }
 
   /* ── Boat ── */
   .boat-wrapper { display: flex; flex-direction: column; align-items: center; }
@@ -212,7 +282,6 @@
     transition: border-color 0.15s, background 0.15s;
     position: relative; cursor: pointer;
   }
-
   .special-seat.drag-over          { border-style: solid; border-color: #60a5fa; background: #1e40af; }
   .special-seat.drag-over-invalid  { border-style: solid; border-color: #dc2626; background: #450a0a; }
   .special-seat.occupied           { border-style: solid; background: #172554; border-color: #6366f1; color: #c7d2fe; }
@@ -222,88 +291,83 @@
     font-size: 0.6rem; color: #6366f1; text-transform: uppercase;
     letter-spacing: 0.5px; display: block; margin-bottom: 3px;
   }
-
   .special-seat .remove-btn {
     position: absolute; top: 4px; right: 6px;
-    font-size: 0.7rem; color: #ef4444; cursor: pointer;
-    opacity: 0; transition: opacity 0.15s;
+    font-size: 0.7rem; color: #ef4444; cursor: pointer; opacity: 0;
   }
-
   .special-seat:hover .remove-btn { opacity: 1; }
 
-  /* Steerer theme */
   #seat-steerer { background: #2e1065; border-color: #7c3aed; color: #c4b5fd; }
   #seat-steerer .seat-label { color: #7c3aed; }
   #seat-steerer.drag-over   { border-color: #a855f7; background: #3b0764; }
   #seat-steerer.drag-over-invalid { border-color: #dc2626; background: #450a0a; }
   #seat-steerer.occupied    { background: #1e0a50; border-color: #8b5cf6; }
 
-  /* ── Seat grid ── */
   .row-header {
     display: grid; grid-template-columns: 1fr 36px 1fr;
     align-items: center; margin-bottom: 4px; gap: 4px;
   }
-
-  .row-header span {
-    font-size: 0.62rem; color: #475569; text-align: center;
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
+  .row-header span { font-size: 0.62rem; color: #475569; text-align: center; text-transform: uppercase; }
 
   .seats-grid { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
-
-  .seat-row { display: grid; grid-template-columns: 1fr 36px 1fr; align-items: center; gap: 4px; }
-
-  .row-num { font-size: 0.68rem; color: #64748b; text-align: center; font-weight: 700; }
+  .seat-row   { display: grid; grid-template-columns: 1fr 36px 1fr; align-items: center; gap: 4px; }
+  .row-num    { font-size: 0.68rem; color: #64748b; text-align: center; font-weight: 700; }
 
   .seat {
     background: #0f172a; border: 1.5px dashed #334155; border-radius: 8px;
     padding: 6px 6px; min-height: 48px; display: flex; align-items: center;
-    justify-content: center; cursor: default;
+    justify-content: center; cursor: pointer;
     transition: border-color 0.15s, background 0.15s;
     position: relative; text-align: center;
   }
-
   .seat.left-seat  { border-color: #1e40af; }
   .seat.right-seat { border-color: #831843; }
-
-  .seat.drag-over.left-seat  { border-style: solid; border-color: #3b82f6; background: #1e3a5f; }
-  .seat.drag-over.right-seat { border-style: solid; border-color: #ec4899; background: #4a044e; }
-  .seat.drag-over-invalid    { border-style: solid !important; border-color: #dc2626 !important; background: #450a0a !important; }
-
-  .seat.occupied { border-style: solid; }
-  .seat.left-seat.occupied  { border-color: #3b82f6; background: #172554; cursor: grab; }
-  .seat.right-seat.occupied { border-color: #ec4899; background: #2d0036; cursor: grab; }
-
-  /* Mobile: seats are tappable */
-  .seat.mobile-tappable { cursor: pointer; }
-  .seat.mobile-tappable:active { opacity: 0.7; }
+  .seat.drag-over.left-seat   { border-style: solid; border-color: #3b82f6; background: #1e3a5f; }
+  .seat.drag-over.right-seat  { border-style: solid; border-color: #ec4899; background: #4a044e; }
+  .seat.drag-over-invalid     { border-style: solid !important; border-color: #dc2626 !important; background: #450a0a !important; }
+  .seat.occupied              { border-style: solid; cursor: grab; }
+  .seat.left-seat.occupied    { border-color: #3b82f6; background: #172554; }
+  .seat.right-seat.occupied   { border-color: #ec4899; background: #2d0036; }
+  .seat:active                { opacity: 0.75; }
 
   .seat-name { font-size: 0.75rem; font-weight: 600; color: #f1f5f9; line-height: 1.2; }
   .seat-wt   { font-size: 0.65rem; color: #94a3b8; }
   .seat-empty-label { font-size: 0.66rem; color: #334155; }
 
   .seat .remove-btn {
-    position: absolute; top: 2px; right: 4px;
-    font-size: 0.65rem; color: #ef4444; cursor: pointer;
-    line-height: 1; opacity: 0; transition: opacity 0.15s;
+    position: absolute; top: 2px; right: 4px; font-size: 0.65rem;
+    color: #ef4444; cursor: pointer; line-height: 1; opacity: 0;
   }
-
   .seat:hover .remove-btn { opacity: 1; }
 
-  /* ── Toast ── */
-  #toast {
-    position: fixed; bottom: 20px; left: 50%;
-    transform: translateX(-50%) translateY(60px);
-    background: #7f1d1d; color: #fca5a5;
-    border: 1px solid #dc2626; border-radius: 10px;
-    padding: 10px 20px; font-size: 0.82rem; font-weight: 600;
-    pointer-events: none;
-    transition: transform 0.22s ease, opacity 0.22s ease;
-    opacity: 0; z-index: 9998; text-align: center;
-    max-width: calc(100vw - 32px);
+  /* ── Unseated section (mobile, below boat) ── */
+  #unseated-section {
+    display: none; width: 100%; max-width: 440px; margin-top: 14px;
   }
 
-  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+  .unseated-title {
+    font-size: 0.75rem; font-weight: 700; color: #94a3b8;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+  }
+
+  .unseated-chips { display: flex; flex-direction: column; gap: 5px; }
+
+  .unseated-chip {
+    background: #0f172a; border: 1px solid #334155;
+    border-left: 3px solid #334155; border-radius: 8px; padding: 8px 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .unseated-chip.male   { border-left-color: #3b82f6; }
+  .unseated-chip.female { border-left-color: #ec4899; }
+  .unseated-chip-info   { flex: 1; min-width: 0; }
+  .unseated-chip-name   { font-size: 0.85rem; font-weight: 600; color: #f1f5f9; }
+  .unseated-chip-meta   { display: flex; align-items: center; gap: 4px; margin-top: 2px; flex-wrap: wrap; }
+  .unseated-chip-wt     { font-size: 0.72rem; color: #64748b; }
+
+  .all-seated-msg {
+    text-align: center; color: #4ade80; font-size: 0.82rem; font-weight: 600;
+    padding: 12px; background: #052e16; border-radius: 10px; border: 1px solid #16a34a;
+  }
 
   /* ── Summary ── */
   .summary { display: flex; flex-direction: column; gap: 10px; }
@@ -313,7 +377,6 @@
     background: #1e293b; border-radius: 12px; padding: 13px;
     border: 1px solid #334155; text-align: center; flex: 1;
   }
-
   .weight-box.left  { border-color: #1e40af; }
   .weight-box.right { border-color: #831843; }
   .weight-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
@@ -325,20 +388,15 @@
   .weight-unit { font-size: 0.78rem; color: #64748b; }
   .weight-sub  { font-size: 0.68rem; color: #64748b; margin-top: 3px; }
 
-  .balance-box {
-    background: #1e293b; border-radius: 12px; padding: 13px; border: 1px solid #334155;
-  }
-
+  .balance-box { background: #1e293b; border-radius: 12px; padding: 13px; border: 1px solid #334155; }
   .balance-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 9px; text-align: center; }
 
   .balance-bar-track {
-    background: #0f172a; border-radius: 99px; height: 13px;
-    width: 100%; overflow: hidden; position: relative; margin-bottom: 5px;
+    background: #0f172a; border-radius: 99px; height: 13px; width: 100%;
+    overflow: hidden; position: relative; margin-bottom: 5px;
   }
-
-  .balance-bar-left  { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #2563eb, #60a5fa); border-radius: 99px; transition: width 0.3s ease; }
-  .balance-bar-right { position: absolute; right: 0; top: 0; bottom: 0; background: linear-gradient(270deg, #db2777, #f472b6); border-radius: 99px; transition: width 0.3s ease; }
-
+  .balance-bar-left  { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #2563eb, #60a5fa); border-radius: 99px; transition: width 0.3s; }
+  .balance-bar-right { position: absolute; right: 0; top: 0; bottom: 0; background: linear-gradient(270deg, #db2777, #f472b6); border-radius: 99px; transition: width 0.3s; }
   .balance-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: #64748b; }
 
   .diff-label { text-align: center; font-size: 0.8rem; font-weight: 600; margin-top: 7px; }
@@ -346,303 +404,208 @@
   .diff-ok   { color: #facc15; }
   .diff-bad  { color: #f87171; }
 
-  .total-box {
-    background: #1e293b; border-radius: 12px; padding: 11px 14px;
-    border: 1px solid #334155; text-align: center;
-  }
-
+  .total-box { background: #1e293b; border-radius: 12px; padding: 11px 14px; border: 1px solid #334155; text-align: center; }
   .total-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 3px; }
   .total-val { font-size: 1.35rem; font-weight: 700; color: #e2e8f0; }
 
   .seat-count { text-align: center; font-size: 0.72rem; color: #64748b; margin-top: 6px; }
 
-  .actions { display: flex; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
-  .actions .btn { flex: 1; min-width: 70px; }
-  .io-area { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-  .io-area .btn { flex: 1; }
+  .io-row { display: flex; gap: 7px; margin-top: 10px; }
+  .io-row .btn-sm { flex: 1; }
 
-  /* ── Unseated section (mobile only, shown below boat) ── */
-  #unseated-section {
-    display: none;
-    width: 100%;
-    max-width: 440px;
-    margin-top: 12px;
-  }
-
-  .unseated-title {
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: #94a3b8;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 8px;
-    padding: 0 2px;
-  }
-
-  .unseated-chips {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .unseated-chip {
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-left: 3px solid #334155;
-    border-radius: 8px;
-    padding: 8px 10px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .unseated-chip.male   { border-left-color: #3b82f6; }
-  .unseated-chip.female { border-left-color: #ec4899; }
-
-  .unseated-chip-info { flex: 1; min-width: 0; }
-  .unseated-chip-name { font-size: 0.85rem; font-weight: 600; color: #f1f5f9; }
-  .unseated-chip-meta { display: flex; align-items: center; gap: 4px; margin-top: 2px; flex-wrap: wrap; }
-  .unseated-chip-wt   { font-size: 0.72rem; color: #64748b; }
-
-  .all-seated-msg {
-    text-align: center;
-    color: #4ade80;
-    font-size: 0.82rem;
-    font-weight: 600;
-    padding: 12px;
-    background: #052e16;
-    border-radius: 10px;
-    border: 1px solid #16a34a;
-  }
-
-  /* ── Mobile seat-selection modal ── */
-  #seat-modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-  }
-
+  /* ═══════════════════════════════════════════
+     MOBILE SEAT MODAL
+  ═══════════════════════════════════════════ */
+  #seat-modal { display: none; position: fixed; inset: 0; z-index: 1000; }
   #seat-modal.open { display: block; }
 
-  #modal-overlay {
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    backdrop-filter: blur(2px);
-  }
+  #modal-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(2px); }
 
   #modal-sheet {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: #1e293b;
-    border-radius: 20px 20px 0 0;
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #1e293b; border-radius: 20px 20px 0 0;
     border-top: 1px solid #334155;
     padding: 0 0 env(safe-area-inset-bottom, 16px);
-    max-height: 82vh;
-    display: flex;
-    flex-direction: column;
+    max-height: 82vh; display: flex; flex-direction: column;
     animation: slideUp 0.22s ease;
   }
 
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(0); }
-  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
-  .modal-handle {
-    width: 40px; height: 4px;
-    background: #475569; border-radius: 2px;
-    margin: 12px auto 0;
-    flex-shrink: 0;
-  }
+  .modal-handle { width: 40px; height: 4px; background: #475569; border-radius: 2px; margin: 12px auto 0; flex-shrink: 0; }
 
   .modal-header {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 16px 10px;
-    flex-shrink: 0;
+    padding: 12px 16px 10px; flex-shrink: 0;
+  }
+  .modal-title    { font-size: 0.95rem; font-weight: 700; color: #f1f5f9; }
+  .modal-subtitle { font-size: 0.72rem; color: #64748b; margin-top: 1px; }
+  .modal-close    { background: #334155; border: none; color: #94a3b8; width: 30px; height: 30px; border-radius: 50%; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  .modal-search-wrap { padding: 0 16px 10px; flex-shrink: 0; }
+
+  #modal-search {
+    width: 100%; background: #0f172a; border: 1px solid #334155; border-radius: 10px;
+    color: #f1f5f9; padding: 10px 14px; font-size: 0.9rem; outline: none;
+  }
+  #modal-search:focus { border-color: #60a5fa; }
+  #modal-search::placeholder { color: #475569; }
+
+  #modal-list { overflow-y: auto; flex: 1; padding: 0 12px; -webkit-overflow-scrolling: touch; }
+
+  .modal-option {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 10px; border-radius: 10px; margin-bottom: 4px;
+    cursor: pointer; border: 1px solid transparent; gap: 8px;
+  }
+  .modal-option:active   { background: #334155; }
+  .modal-option.current  { background: #052e16; border-color: #16a34a; }
+  .modal-option.elsewhere { opacity: 0.75; }
+  .modal-opt-left  { flex: 1; min-width: 0; }
+  .modal-opt-name  { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; display: flex; align-items: center; gap: 5px; }
+  .modal-opt-meta  { display: flex; align-items: center; gap: 5px; margin-top: 3px; flex-wrap: wrap; }
+  .modal-opt-wt    { font-size: 0.72rem; color: #64748b; }
+  .modal-tag       { font-size: 0.62rem; font-weight: 600; padding: 1px 6px; border-radius: 4px; }
+  .modal-tag.here  { background: #14532d; color: #4ade80; }
+  .modal-tag.at    { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+  .modal-opt-right { display: flex; gap: 3px; flex-shrink: 0; }
+  .modal-divider   { font-size: 0.65rem; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 4px 4px; }
+  .modal-empty     { text-align: center; color: #475569; font-size: 0.82rem; padding: 24px 0; }
+  .modal-clear-btn {
+    margin: 8px 16px 16px; padding: 12px; background: #1a0808;
+    border: 1px solid #7f1d1d; border-radius: 10px; color: #f87171;
+    font-size: 0.85rem; font-weight: 600; cursor: pointer; text-align: center;
+    flex-shrink: 0; display: none;
+  }
+  .modal-clear-btn:active { background: #450a0a; }
+
+  /* ═══════════════════════════════════════════
+     PAGE 2 — ROSTER MANAGEMENT
+  ═══════════════════════════════════════════ */
+  #page-roster { padding-bottom: 32px; }
+
+  .roster-page-content {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
 
-  .modal-title {
+  /* ── Add / Edit form card ── */
+  .form-card {
+    background: #1e293b;
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid #334155;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .form-card-title {
     font-size: 0.95rem;
     font-weight: 700;
     color: #f1f5f9;
   }
 
-  .modal-subtitle {
-    font-size: 0.72rem;
+  .form-card-title span {
+    font-size: 0.75rem;
     color: #64748b;
-    margin-top: 1px;
+    font-weight: 400;
+    margin-left: 6px;
   }
 
-  .modal-close {
-    background: #334155; border: none; color: #94a3b8;
-    width: 30px; height: 30px; border-radius: 50%;
-    font-size: 0.85rem; cursor: pointer; display: flex;
-    align-items: center; justify-content: center;
-    flex-shrink: 0;
+  .form-row { display: grid; grid-template-columns: 1fr 100px; gap: 10px; }
+
+  .form-actions { display: flex; gap: 8px; }
+  .form-actions .btn        { flex: 2; }
+  .form-actions .btn-outline { flex: 1; }
+
+  /* ── Edit highlight on form card ── */
+  .form-card.editing { border-color: #3b82f6; }
+
+  /* ── Roster list (management page) ── */
+  .roster-mgmt-header {
+    display: flex; align-items: center; justify-content: space-between;
   }
 
-  .modal-search-wrap {
-    padding: 0 16px 10px;
-    flex-shrink: 0;
+  .roster-mgmt-title {
+    font-size: 0.82rem; font-weight: 700; color: #cbd5e1;
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
 
-  #modal-search {
-    width: 100%;
-    background: #0f172a;
-    border: 1px solid #334155;
-    border-radius: 10px;
-    color: #f1f5f9;
-    padding: 10px 14px;
-    font-size: 0.9rem;
-    outline: none;
+  .roster-mgmt-count {
+    font-size: 0.75rem; color: #64748b;
   }
 
-  #modal-search:focus { border-color: #60a5fa; }
-  #modal-search::placeholder { color: #475569; }
-
-  #modal-list {
-    overflow-y: auto;
-    flex: 1;
-    padding: 0 12px;
-    -webkit-overflow-scrolling: touch;
+  .roster-mgmt-list {
+    display: flex; flex-direction: column; gap: 8px; margin-top: 10px;
   }
 
-  .modal-option {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 10px;
-    border-radius: 10px;
-    margin-bottom: 4px;
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: background 0.1s;
-    gap: 8px;
+  .mgmt-chip {
+    background: #1e293b; border: 1px solid #334155;
+    border-left: 3px solid #334155; border-radius: 10px;
+    padding: 12px 12px 12px 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .mgmt-chip.male   { border-left-color: #3b82f6; }
+  .mgmt-chip.female { border-left-color: #ec4899; }
+  .mgmt-chip.editing-target { border-color: #3b82f6; background: #0f2040; }
+
+  .mgmt-chip-info { flex: 1; min-width: 0; }
+  .mgmt-chip-top  { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .mgmt-chip-name { font-size: 0.92rem; font-weight: 700; color: #f1f5f9; }
+  .mgmt-chip-meta { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .mgmt-chip-wt   { font-size: 0.75rem; color: #64748b; }
+  .mgmt-chip-seated { font-size: 0.65rem; color: #4ade80; }
+
+  .mgmt-chip-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .mgmt-empty {
+    text-align: center; color: #475569; font-size: 0.85rem; padding: 32px;
+    background: #1e293b; border-radius: 12px; border: 1px dashed #334155;
   }
 
-  .modal-option:active { background: #334155; }
+  /* ── IO buttons on roster page ── */
+  .roster-io { display: flex; gap: 8px; }
+  .roster-io .btn-sm { flex: 1; }
 
-  .modal-option.current {
-    background: #052e16;
-    border-color: #16a34a;
-  }
-
-  .modal-option.elsewhere {
-    opacity: 0.7;
-  }
-
-  .modal-opt-left { flex: 1; min-width: 0; }
-  .modal-opt-name { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; display: block; }
-
-  .modal-opt-meta {
-    display: flex; align-items: center; gap: 5px; margin-top: 2px; flex-wrap: wrap;
-  }
-
-  .modal-opt-wt { font-size: 0.72rem; color: #64748b; }
-
-  .modal-tag {
-    font-size: 0.62rem; font-weight: 600; padding: 1px 6px;
-    border-radius: 4px;
-  }
-
-  .modal-tag.current-tag { background: #14532d; color: #4ade80; }
-  .modal-tag.elsewhere-tag { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
-
-  .modal-opt-right { display: flex; gap: 3px; flex-shrink: 0; }
-
-  .modal-clear-btn {
-    margin: 8px 16px 16px;
-    padding: 12px;
-    background: #1a0808;
-    border: 1px solid #7f1d1d;
-    border-radius: 10px;
-    color: #f87171;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-    flex-shrink: 0;
-    display: none;
-  }
-
-  .modal-clear-btn:active { background: #450a0a; }
-
-  .modal-empty {
-    text-align: center;
-    color: #475569;
-    font-size: 0.82rem;
-    padding: 24px 0;
-  }
-
-  .modal-divider {
-    font-size: 0.65rem;
-    color: #475569;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding: 6px 4px 4px;
-  }
-
-  /* ── Desktop only / Mobile only ── */
-  .desktop-only { display: block; }
-  .mobile-only  { display: none; }
-
-  /* ── Mobile layout ── */
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE
+  ═══════════════════════════════════════════ */
   @media (max-width: 800px) {
-    body { padding: 10px; }
-
-    .layout { grid-template-columns: 1fr; gap: 12px; }
-
+    .layout { grid-template-columns: 1fr; gap: 12px; padding: 10px; }
     .boat-wrapper { order: 1; }
     .summary      { order: 2; }
-    #roster-panel { order: 3; }
+    .roster-panel { order: 3; }
 
     .summary-weights { flex-direction: row; }
-    .weight-val { font-size: 1.5rem; }
-
-    .seat { min-height: 52px; }
-    .roster-list { max-height: none; }
-    .paddler-chip { padding: 10px 8px 10px 11px; }
-    .boat { max-width: 100%; }
+    .weight-val  { font-size: 1.5rem; }
+    .seat        { min-height: 52px; }
     .seat-row, .row-header { grid-template-columns: 1fr 28px 1fr; }
+    .boat        { max-width: 100%; }
+    .roster-chips { max-height: none; }
 
-    /* Show unseated section on mobile */
     #unseated-section { display: block; }
 
-    .desktop-only { display: none !important; }
-    .mobile-only  { display: block; }
+    .seat .remove-btn,
+    .special-seat .remove-btn { opacity: 0.6; }
 
-    /* Touch devices: show remove btn on roster chips */
-    .seat .remove-btn { opacity: 0.6; }
-  }
+    .form-row { grid-template-columns: 1fr 90px; }
 
-  @media (max-width: 380px) {
-    .gsb-val { font-size: 1.1rem; }
-    .gsb-lbl { font-size: 0.58rem; }
+    .planner-subtitle { display: none; }
   }
 </style>
 </head>
 <body>
 
-<h1>🌀 Vortex Seating Planner</h1>
-<p class="subtitle desktop-only">
-  Drag paddlers onto seats &nbsp;·&nbsp;
-  <span style="color:#60a5fa">■ Left</span>&nbsp;
-  <span style="color:#f472b6">■ Right</span>&nbsp;
-  <span style="color:#a855f7">■ Steer</span>
-  &nbsp;·&nbsp; Position badges restrict seat placement
-</p>
-<p class="subtitle mobile-only">
-  Tap any seat to assign a paddler &nbsp;·&nbsp;
-  <span style="color:#60a5fa">■ L</span>&nbsp;
-  <span style="color:#f472b6">■ R</span>&nbsp;
-  <span style="color:#a855f7">■ S</span>
-</p>
-
 <div id="toast"></div>
 
-<!-- ── Mobile seat-selection modal ── -->
+<!-- ══════════════════════════════════════════
+     MOBILE SEAT MODAL
+══════════════════════════════════════════ -->
 <div id="seat-modal">
   <div id="modal-overlay" onclick="closeModal()"></div>
   <div id="modal-sheet">
@@ -662,13 +625,29 @@
   </div>
 </div>
 
-<div class="layout">
+<!-- ══════════════════════════════════════════
+     PAGE 1: SEATING PLANNER
+══════════════════════════════════════════ -->
+<div id="page-planner" class="page active">
 
-  <!-- ── Roster ── -->
-  <div class="panel" id="roster-panel">
-    <div class="roster-top">
-      <div class="roster-title-row">
-        <span class="panel-title">Paddler Roster</span>
+  <div class="planner-header">
+    <div class="planner-title">🌀 Vortex Seating Planner</div>
+    <div class="planner-subtitle">
+      Drag paddlers onto seats &nbsp;·&nbsp;
+      <span style="color:#60a5fa">■ Left</span>&nbsp;
+      <span style="color:#f472b6">■ Right</span>&nbsp;
+      <span style="color:#a855f7">■ Steer</span>
+      &nbsp;·&nbsp; Position badges restrict seat placement
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- Roster panel -->
+    <div class="roster-panel" id="roster-panel">
+      <div class="roster-panel-header">
+        <span class="roster-panel-title">Roster</span>
+        <button class="btn-roster-manage" onclick="goToPage('roster')">✏️ Manage</button>
       </div>
       <div class="gender-stat-bar">
         <div class="gsb-cell male">
@@ -684,117 +663,161 @@
           <div class="gsb-lbl">Seated / 20</div>
         </div>
       </div>
-    </div>
-
-    <div class="add-paddler">
-      <input id="inp-name" type="text" placeholder="Name" maxlength="24" autocomplete="off">
-      <div style="display:flex;gap:6px;">
-        <input id="inp-weight" type="number" placeholder="Weight (kg)" min="1" max="300" step="0.5" style="flex:1" inputmode="decimal">
-        <select id="inp-gender" style="width:64px;flex-shrink:0;">
-          <option value="">—</option>
-          <option value="M">♂ M</option>
-          <option value="F">♀ F</option>
-        </select>
+      <div class="roster-chips" id="roster-chips"></div>
+      <div class="io-row">
+        <button class="btn-sm" onclick="exportData()" style="background:#0f4c75;">Export</button>
+        <button class="btn-sm" onclick="document.getElementById('imp').click()" style="background:#0f4c75;">Import</button>
+        <input type="file" id="imp" accept=".json" style="display:none" onchange="importData(event)">
+        <button class="btn-sm" onclick="clearSeats()" style="background:#7c2d12;">Clear Seats</button>
       </div>
-      <div class="pos-checkboxes">
-        <label class="pos-check"><input type="checkbox" id="pos-L"> <span style="color:#93c5fd">L</span> Left</label>
-        <label class="pos-check"><input type="checkbox" id="pos-R"> <span style="color:#f9a8d4">R</span> Right</label>
-        <label class="pos-check"><input type="checkbox" id="pos-S"> <span style="color:#c4b5fd">S</span> Steer</label>
+    </div>
+
+    <!-- Boat -->
+    <div class="boat-wrapper">
+      <div class="boat">
+        <div class="boat-header">🥁 Front — Drummer</div>
+        <div class="special-seat-row">
+          <div class="special-seat" id="seat-drummer" data-sid="drummer"
+            ondragover="dragOverEl(event,'drummer')" ondragleave="dragLeaveEl(event)"
+            ondrop="dropEl(event,'drummer')" onclick="handleSeatClick('drummer')">
+            <span class="seat-label">Drummer (unrestricted)</span>
+            <span class="remove-btn" onclick="event.stopPropagation();removePaddlerFromSeat('drummer')">✕</span>
+            <span class="seat-content">Tap / drop to assign</span>
+          </div>
+        </div>
+        <div class="row-header">
+          <span>Left</span><span>#</span><span>Right</span>
+        </div>
+        <div class="seats-grid" id="seats-grid"></div>
+        <div class="boat-header" style="margin-top:8px;">🚣 Back — Steersperson</div>
+        <div class="special-seat-row">
+          <div class="special-seat" id="seat-steerer" data-sid="steerer"
+            ondragover="dragOverEl(event,'steerer')" ondragleave="dragLeaveEl(event)"
+            ondrop="dropEl(event,'steerer')" onclick="handleSeatClick('steerer')">
+            <span class="seat-label">Steersperson · S position only</span>
+            <span class="remove-btn" onclick="event.stopPropagation();removePaddlerFromSeat('steerer')">✕</span>
+            <span class="seat-content">Tap / drop to assign</span>
+          </div>
+        </div>
       </div>
-      <div class="pos-hint">No boxes checked = can sit anywhere</div>
-      <button class="btn" onclick="addPaddler()">+ Add Paddler</button>
+      <div class="seat-count" id="seat-count">0 / 20 seats filled</div>
+
+      <!-- Unseated list: mobile only -->
+      <div id="unseated-section">
+        <div class="unseated-title">Not yet seated</div>
+        <div class="unseated-chips" id="unseated-list"></div>
+      </div>
     </div>
 
-    <div class="roster-list" id="roster-list"></div>
+    <!-- Summary -->
+    <div class="summary">
+      <div class="summary-weights">
+        <div class="weight-box left">
+          <h3>⬅ Left</h3>
+          <div><span class="weight-val" id="left-total">0</span> <span class="weight-unit">kg</span></div>
+          <div class="weight-sub" id="left-count">0 paddlers</div>
+        </div>
+        <div class="weight-box right">
+          <h3>Right ➡</h3>
+          <div><span class="weight-val" id="right-total">0</span> <span class="weight-unit">kg</span></div>
+          <div class="weight-sub" id="right-count">0 paddlers</div>
+        </div>
+      </div>
+      <div class="balance-box">
+        <h3>Balance</h3>
+        <div class="balance-bar-track">
+          <div class="balance-bar-left"  id="bar-left"  style="width:50%"></div>
+          <div class="balance-bar-right" id="bar-right" style="width:50%"></div>
+        </div>
+        <div class="balance-labels">
+          <span id="bar-left-pct">50%</span>
+          <span id="bar-right-pct">50%</span>
+        </div>
+        <div class="diff-label" id="diff-label">—</div>
+      </div>
+      <div class="total-box">
+        <h3>Total Weight (paddlers)</h3>
+        <div class="total-val" id="grand-total">0 kg</div>
+      </div>
+    </div>
 
-    <div class="io-area">
-      <button class="btn btn-sm" onclick="exportData()" style="background:#0f4c75;">Export</button>
-      <button class="btn btn-sm" onclick="document.getElementById('imp').click()" style="background:#0f4c75;">Import</button>
-      <input type="file" id="imp" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</div><!-- end #page-planner -->
+
+<!-- ══════════════════════════════════════════
+     PAGE 2: ROSTER MANAGEMENT
+══════════════════════════════════════════ -->
+<div id="page-roster" class="page">
+
+  <div class="top-bar">
+    <button class="btn-back" onclick="goToPage('planner')">← Back</button>
+    <div>
+      <div class="top-bar-title">Roster Management</div>
+      <div class="top-bar-sub" id="roster-page-sub">0 paddlers</div>
     </div>
-    <div class="actions">
-      <button class="btn btn-sm" onclick="clearSeats()" style="background:#7c2d12;">Clear Seats</button>
-      <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
-    </div>
+    <div style="width:70px"></div><!-- spacer to centre title -->
   </div>
 
-  <!-- ── Boat ── -->
-  <div class="boat-wrapper">
-    <div class="boat">
-      <div class="boat-header">🥁 Front — Drummer</div>
+  <div class="roster-page-content">
 
-      <div class="special-seat-row">
-        <div class="special-seat" id="seat-drummer" data-sid="drummer"
-          ondragover="dragOverEl(event,'drummer')" ondragleave="dragLeaveEl(event)"
-          ondrop="dropEl(event,'drummer')" onclick="handleSeatClick('drummer')">
-          <span class="seat-label">Drummer (unrestricted)</span>
-          <span class="remove-btn" onclick="event.stopPropagation();removePaddlerFromSeat('drummer')">✕</span>
-          <span class="seat-content">Tap to assign</span>
+    <!-- Add / Edit form -->
+    <div class="form-card" id="form-card">
+      <div class="form-card-title" id="form-title">Add Paddler</div>
+
+      <div class="field-group">
+        <div class="field-label">Name</div>
+        <input class="field-input" id="inp-name" type="text" placeholder="Full name" maxlength="24" autocomplete="off">
+      </div>
+
+      <div class="form-row">
+        <div class="field-group">
+          <div class="field-label">Weight (kg)</div>
+          <input class="field-input" id="inp-weight" type="number" placeholder="e.g. 70" min="1" max="300" step="0.5" inputmode="decimal">
+        </div>
+        <div class="field-group">
+          <div class="field-label">Gender</div>
+          <select class="field-input" id="inp-gender">
+            <option value="">—</option>
+            <option value="M">♂ Male</option>
+            <option value="F">♀ Female</option>
+          </select>
         </div>
       </div>
 
-      <div class="row-header">
-        <span>Left</span>
-        <span>#</span>
-        <span>Right</span>
-      </div>
-
-      <div class="seats-grid" id="seats-grid"></div>
-
-      <div class="boat-header" style="margin-top:8px;">🚣 Back — Steersperson</div>
-      <div class="special-seat-row">
-        <div class="special-seat" id="seat-steerer" data-sid="steerer"
-          ondragover="dragOverEl(event,'steerer')" ondragleave="dragLeaveEl(event)"
-          ondrop="dropEl(event,'steerer')" onclick="handleSeatClick('steerer')">
-          <span class="seat-label">Steersperson · S position only</span>
-          <span class="remove-btn" onclick="event.stopPropagation();removePaddlerFromSeat('steerer')">✕</span>
-          <span class="seat-content">Tap to assign</span>
+      <div class="field-group">
+        <div class="field-label">Positions allowed <span style="font-weight:400;color:#475569">(none = anywhere)</span></div>
+        <div class="pos-checkboxes">
+          <label class="pos-check"><input type="checkbox" id="pos-L"> <span style="color:#93c5fd">L</span> Left</label>
+          <label class="pos-check"><input type="checkbox" id="pos-R"> <span style="color:#f9a8d4">R</span> Right</label>
+          <label class="pos-check"><input type="checkbox" id="pos-S"> <span style="color:#c4b5fd">S</span> Steer</label>
         </div>
       </div>
+
+      <div class="form-actions">
+        <button class="btn" id="submit-btn" onclick="submitPaddler()">+ Add Paddler</button>
+        <button class="btn-outline" id="cancel-btn" onclick="cancelEdit()" style="display:none">Cancel</button>
+      </div>
     </div>
 
-    <div class="seat-count" id="seat-count">0 / 20 paddler seats filled</div>
-
-    <!-- Unseated paddlers — mobile only, shown below boat -->
-    <div id="unseated-section">
-      <div class="unseated-title">Not yet seated</div>
-      <div class="unseated-chips" id="unseated-list"></div>
+    <!-- Paddler list -->
+    <div>
+      <div class="roster-mgmt-header">
+        <span class="roster-mgmt-title">All Paddlers</span>
+        <span class="roster-mgmt-count" id="mgmt-count"></span>
+      </div>
+      <div class="roster-mgmt-list" id="mgmt-list"></div>
     </div>
+
+    <!-- IO -->
+    <div class="roster-io">
+      <button class="btn-sm" onclick="exportData()" style="background:#0f4c75;padding:10px;">Export JSON</button>
+      <button class="btn-sm" onclick="document.getElementById('imp2').click()" style="background:#0f4c75;padding:10px;">Import JSON</button>
+      <input type="file" id="imp2" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+    <button class="btn-danger-full" onclick="clearAll()">Clear All Paddlers &amp; Seats</button>
+
   </div>
-
-  <!-- ── Summary ── -->
-  <div class="summary">
-    <div class="summary-weights">
-      <div class="weight-box left">
-        <h3>⬅ Left</h3>
-        <div><span class="weight-val" id="left-total">0</span> <span class="weight-unit">kg</span></div>
-        <div class="weight-sub" id="left-count">0 paddlers</div>
-      </div>
-      <div class="weight-box right">
-        <h3>Right ➡</h3>
-        <div><span class="weight-val" id="right-total">0</span> <span class="weight-unit">kg</span></div>
-        <div class="weight-sub" id="right-count">0 paddlers</div>
-      </div>
-    </div>
-    <div class="balance-box">
-      <h3>Balance</h3>
-      <div class="balance-bar-track">
-        <div class="balance-bar-left"  id="bar-left"  style="width:50%"></div>
-        <div class="balance-bar-right" id="bar-right" style="width:50%"></div>
-      </div>
-      <div class="balance-labels">
-        <span id="bar-left-pct">50%</span>
-        <span id="bar-right-pct">50%</span>
-      </div>
-      <div class="diff-label" id="diff-label">—</div>
-    </div>
-    <div class="total-box">
-      <h3>Total Weight (paddlers)</h3>
-      <div class="total-val" id="grand-total">0 kg</div>
-    </div>
-  </div>
-
-</div>
+</div><!-- end #page-roster -->
 
 <script>
 // ── Initial data ──────────────────────────────────────────────────────────
@@ -828,9 +851,10 @@ const INITIAL_PADDLERS = [
 ];
 
 // ── State ─────────────────────────────────────────────────────────────────
-let paddlers = [];
-let seats    = {};
-let dragId   = null;
+let paddlers  = [];
+let seats     = {};
+let dragId    = null;
+let editingId = null;   // paddler id being edited, null = add mode
 
 const ROWS    = 10;
 const SPECIAL = ['drummer','steerer'];
@@ -843,7 +867,18 @@ initSeats();
 
 function isMobile() { return window.innerWidth <= 800; }
 
-// ── Restriction check ─────────────────────────────────────────────────────
+// ── Page navigation ───────────────────────────────────────────────────────
+function goToPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${name}`).classList.add('active');
+  window.scrollTo(0, 0);
+  if (name === 'roster') {
+    cancelEdit();
+    renderMgmtList();
+  }
+}
+
+// ── Position check ────────────────────────────────────────────────────────
 function canDrop(pid, sid) {
   const p = paddlers.find(x => x.id === pid);
   if (!p || !p.positions || p.positions.length === 0) return true;
@@ -854,18 +889,14 @@ function canDrop(pid, sid) {
   return true;
 }
 
-// ── Core drop ─────────────────────────────────────────────────────────────
+// ── Core drop (desktop drag) ──────────────────────────────────────────────
 function handleDrop(sid) {
   if (!dragId) return;
   if (!canDrop(dragId, sid)) {
     const p = paddlers.find(x => x.id === dragId);
-    const allowed = (p?.positions || []).join('/') || 'unrestricted';
-    const label   = sid === 'steerer' ? 'Steersperson'
-                  : sid.startsWith('L') ? 'Left side'
-                  : sid.startsWith('R') ? 'Right side' : sid;
-    showToast(`${p?.name} can't sit ${label} · allowed: ${allowed}`);
-    dragId = null;
-    return;
+    const label = sid === 'steerer' ? 'Steersperson' : sid.startsWith('L') ? 'Left side' : sid.startsWith('R') ? 'Right side' : sid;
+    showToast(`${p?.name} can't sit ${label}`, 'error');
+    dragId = null; return;
   }
   Object.keys(seats).forEach(k => { if (seats[k] === dragId) seats[k] = null; });
   seats[sid] = dragId;
@@ -873,245 +904,182 @@ function handleDrop(sid) {
   render();
 }
 
-// ── Seat click — opens modal on mobile, no-op on desktop ─────────────────
+// ── Seat click → modal on mobile ──────────────────────────────────────────
 function handleSeatClick(sid) {
   if (!isMobile()) return;
   openModal(sid);
 }
 
-// ── Mobile modal ──────────────────────────────────────────────────────────
+// ── Mobile seat modal ─────────────────────────────────────────────────────
 let modalSid = null;
 
 function openModal(sid) {
   modalSid = sid;
-
-  const label = sid === 'drummer'  ? 'Drummer'
-              : sid === 'steerer'  ? 'Steersperson'
+  const label = sid === 'drummer'   ? 'Drummer'
+              : sid === 'steerer'   ? 'Steersperson'
               : sid.startsWith('L') ? `Left · Row ${sid.slice(1)}`
-              : `Right · Row ${sid.slice(1)}`;
+              :                       `Right · Row ${sid.slice(1)}`;
 
   document.getElementById('modal-title').textContent = label;
-
-  const currentPid = seats[sid];
-  const currentP   = paddlers.find(x => x.id === currentPid);
-  document.getElementById('modal-subtitle').textContent =
-    currentP ? `Currently: ${currentP.name}` : 'Empty seat';
-
-  const clearBtn = document.getElementById('modal-clear-btn');
-  clearBtn.style.display = currentPid ? 'block' : 'none';
-
+  const currentP = paddlers.find(x => x.id === seats[sid]);
+  document.getElementById('modal-subtitle').textContent = currentP ? `Currently: ${currentP.name}` : 'Empty seat';
+  document.getElementById('modal-clear-btn').style.display = seats[sid] ? 'block' : 'none';
   document.getElementById('modal-search').value = '';
   renderModalList();
-
   document.getElementById('seat-modal').classList.add('open');
   setTimeout(() => document.getElementById('modal-search').focus(), 300);
 }
 
 function closeModal() {
   document.getElementById('seat-modal').classList.remove('open');
-  document.getElementById('modal-search').value = '';
   modalSid = null;
 }
 
-function clearModalSeat() {
-  if (modalSid) { seats[modalSid] = null; }
-  closeModal();
-  render();
-}
+function clearModalSeat() { if (modalSid) { seats[modalSid] = null; } closeModal(); render(); }
 
 function renderModalList() {
-  const q       = document.getElementById('modal-search').value.toLowerCase().trim();
-  const list    = document.getElementById('modal-list');
-  const currentPid = seats[modalSid];
-
-  // All eligible for this seat
+  const q   = document.getElementById('modal-search').value.toLowerCase().trim();
+  const list = document.getElementById('modal-list');
+  const pid  = seats[modalSid];
   let eligible = paddlers.filter(p => canDrop(p.id, modalSid));
   if (q) eligible = eligible.filter(p => p.name.toLowerCase().includes(q));
-
   list.innerHTML = '';
+  if (!eligible.length) { list.innerHTML = '<div class="modal-empty">No eligible paddlers</div>'; return; }
 
-  if (!eligible.length) {
-    list.innerHTML = '<div class="modal-empty">No eligible paddlers found</div>';
-    return;
-  }
+  const current   = eligible.filter(p => p.id === pid);
+  const available = eligible.filter(p => p.id !== pid && !Object.values(seats).includes(p.id));
+  const elsewhere = eligible.filter(p => p.id !== pid &&  Object.values(seats).includes(p.id));
 
-  // Separate: current, available, elsewhere
-  const current   = eligible.filter(p => p.id === currentPid);
-  const available = eligible.filter(p => p.id !== currentPid && !Object.values(seats).includes(p.id));
-  const elsewhere = eligible.filter(p => p.id !== currentPid &&  Object.values(seats).includes(p.id));
+  const divider = t => { const d = document.createElement('div'); d.className = 'modal-divider'; d.textContent = t; list.appendChild(d); };
 
-  function addDivider(text) {
-    const d = document.createElement('div');
-    d.className = 'modal-divider';
-    d.textContent = text;
-    list.appendChild(d);
-  }
-
-  function addOption(p, cls, tagHTML) {
+  const addOpt = (p, cls, tag) => {
     const div = document.createElement('div');
     div.className = `modal-option ${cls}`;
     div.innerHTML = `
       <div class="modal-opt-left">
-        <span class="modal-opt-name">
-          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}" style="display:inline-block;margin-right:4px;vertical-align:middle;"></span>` : ''}
+        <div class="modal-opt-name">
+          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}"></span>` : ''}
           ${esc(p.name)}
-        </span>
+        </div>
         <div class="modal-opt-meta">
           <span class="modal-opt-wt">${p.weight} kg</span>
-          ${tagHTML}
+          ${tag}
         </div>
       </div>
       <div class="modal-opt-right">
         ${(p.positions||[]).map(pos=>`<span class="pos-badge ${pos}">${pos}</span>`).join('')}
       </div>`;
-
     div.onclick = () => {
-      if (p.id === currentPid) {
-        // Tap current = deselect
-        seats[modalSid] = null;
-      } else {
-        // Move from elsewhere if needed, assign here
-        Object.keys(seats).forEach(k => { if (seats[k] === p.id) seats[k] = null; });
-        seats[modalSid] = p.id;
-      }
-      closeModal();
-      render();
+      if (p.id === pid) { seats[modalSid] = null; }
+      else { Object.keys(seats).forEach(k => { if (seats[k] === p.id) seats[k] = null; }); seats[modalSid] = p.id; }
+      closeModal(); render();
     };
     list.appendChild(div);
-  }
+  };
 
-  if (current.length) {
-    addDivider('Currently assigned');
-    current.forEach(p => addOption(p, 'current', '<span class="modal-tag current-tag">✓ here</span>'));
-  }
-
-  if (available.length) {
-    if (current.length) addDivider('Available');
-    available.forEach(p => addOption(p, '', ''));
-  }
-
+  if (current.length)   { divider('Currently assigned'); current.forEach(p => addOpt(p, 'current', '<span class="modal-tag here">✓ here</span>')); }
+  if (available.length) { if (current.length) divider('Available'); available.forEach(p => addOpt(p, '', '')); }
   if (elsewhere.length) {
-    addDivider('Seated elsewhere — tap to move');
+    divider('Seated elsewhere — tap to move');
     elsewhere.forEach(p => {
-      const atSid = Object.entries(seats).find(([k,v]) => v === p.id)?.[0];
-      const atLabel = !atSid ? '' :
-        atSid === 'drummer'  ? 'Drummer' :
-        atSid === 'steerer'  ? 'Steerer' :
-        atSid.startsWith('L') ? `L${atSid.slice(1)}` : `R${atSid.slice(1)}`;
-      addOption(p, 'elsewhere', `<span class="modal-tag elsewhere-tag">at ${atLabel}</span>`);
+      const at = Object.entries(seats).find(([k,v]) => v === p.id)?.[0];
+      const atLbl = !at ? '' : at === 'drummer' ? 'Drummer' : at === 'steerer' ? 'Steerer' : at.startsWith('L') ? `L${at.slice(1)}` : `R${at.slice(1)}`;
+      addOpt(p, 'elsewhere', `<span class="modal-tag at">at ${atLbl}</span>`);
     });
   }
 }
 
-// ── Toast ─────────────────────────────────────────────────────────────────
-let toastTimer = null;
-function showToast(msg) {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
-}
-
-// ── Render: boat ──────────────────────────────────────────────────────────
-function renderBoat() {
-  const grid = document.getElementById('seats-grid');
-  grid.innerHTML = '';
-  for (let r = 1; r <= ROWS; r++) {
-    const row = document.createElement('div');
-    row.className = 'seat-row';
-    row.innerHTML = seatHTML(`L${r}`, 'left-seat') +
-      `<div class="row-num">${r}</div>` +
-      seatHTML(`R${r}`, 'right-seat');
-    grid.appendChild(row);
-  }
-
-  document.querySelectorAll('.seat[data-sid]').forEach(el => {
-    const sid = el.dataset.sid;
-
-    // Desktop: drag events
-    el.addEventListener('dragover',  e => { e.preventDefault(); highlightSeat(el, sid); });
-    el.addEventListener('dragleave', () => clearHighlight(el));
-    el.addEventListener('drop',      e => { e.preventDefault(); clearHighlight(el); handleDrop(sid); });
-    el.addEventListener('dragstart', e => {
-      const pid = seats[sid];
-      if (pid) { dragId = pid; e.dataTransfer.effectAllowed = 'move'; }
-    });
-
-    // Both: click opens modal on mobile, or removes on desktop via remove-btn
-    el.addEventListener('click', e => {
-      if (e.target.classList.contains('remove-btn')) return;
-      if (isMobile()) openModal(sid);
-    });
-
-    el.querySelector('.remove-btn')?.addEventListener('click', ev => {
-      ev.stopPropagation(); removePaddlerFromSeat(sid);
-    });
-  });
-
-  renderSpecialSeat('drummer');
-  renderSpecialSeat('steerer');
-  updateSummary();
-}
-
-function seatHTML(sid, cls) {
-  const p = paddlers.find(x => x.id === seats[sid]);
-  return `<div class="seat ${cls}${p ? ' occupied' : ''} mobile-tappable" data-sid="${sid}" draggable="${p ? 'true' : 'false'}">
-    <span class="remove-btn">✕</span>
-    ${p ? `<div><div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div></div>`
-        : `<span class="seat-empty-label">empty</span>`}
-  </div>`;
-}
-
-function renderSpecialSeat(sid) {
-  const el = document.getElementById(`seat-${sid}`);
-  if (!el) return;
-  const p = paddlers.find(x => x.id === seats[sid]);
-  const c = el.querySelector('.seat-content');
-  if (p) {
-    el.classList.add('occupied');
-    c.innerHTML = `<div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div>`;
-  } else {
-    el.classList.remove('occupied');
-    c.textContent = isMobile()
-      ? (sid === 'steerer' ? 'Tap to assign (S only)' : 'Tap to assign')
-      : (sid === 'steerer' ? 'Drop here (S only)' : 'Drop here');
-  }
-}
-
+// ── Desktop drag events ───────────────────────────────────────────────────
 function highlightSeat(el, sid) {
-  el.classList.remove('drag-over', 'drag-over-invalid');
+  el.classList.remove('drag-over','drag-over-invalid');
   el.classList.add(dragId && canDrop(dragId, sid) ? 'drag-over' : 'drag-over-invalid');
 }
-
-function clearHighlight(el) {
-  el.classList.remove('drag-over', 'drag-over-invalid');
-}
-
-// Desktop drag event handlers for special seats
+function clearHighlight(el) { el.classList.remove('drag-over','drag-over-invalid'); }
 function dragOverEl(e, sid) { e.preventDefault(); highlightSeat(e.currentTarget, sid); }
 function dragLeaveEl(e)     { clearHighlight(e.currentTarget); }
 function dropEl(e, sid)     { e.preventDefault(); clearHighlight(e.currentTarget); handleDrop(sid); }
 
-// Drop onto roster = unassign (desktop)
 document.getElementById('roster-panel').addEventListener('dragover', e => e.preventDefault());
 document.getElementById('roster-panel').addEventListener('drop', e => {
   e.preventDefault();
   if (!dragId) return;
   Object.keys(seats).forEach(k => { if (seats[k] === dragId) seats[k] = null; });
-  dragId = null;
-  render();
+  dragId = null; render();
 });
 
-// ── Render: roster ────────────────────────────────────────────────────────
-function renderRoster() {
-  const list = document.getElementById('roster-list');
+// ── Roster form (Page 2) ──────────────────────────────────────────────────
+function editPaddler(pid) {
+  goToPage('roster');
+  editingId = pid;
+  const p = paddlers.find(x => x.id === pid);
+  if (!p) return;
+  document.getElementById('inp-name').value   = p.name;
+  document.getElementById('inp-weight').value = p.weight;
+  document.getElementById('inp-gender').value = p.gender || '';
+  ['L','R','S'].forEach(k => { document.getElementById(`pos-${k}`).checked = (p.positions||[]).includes(k); });
+  document.getElementById('form-title').textContent   = `Edit Paddler`;
+  document.getElementById('submit-btn').textContent   = 'Save Changes';
+  document.getElementById('cancel-btn').style.display = 'block';
+  document.getElementById('form-card').classList.add('editing');
+  document.getElementById('inp-name').focus();
+  renderMgmtList();
+}
+
+function cancelEdit() {
+  editingId = null;
+  clearForm();
+  document.getElementById('form-title').textContent   = 'Add Paddler';
+  document.getElementById('submit-btn').textContent   = '+ Add Paddler';
+  document.getElementById('cancel-btn').style.display = 'none';
+  document.getElementById('form-card').classList.remove('editing');
+}
+
+function clearForm() {
+  ['inp-name','inp-weight','inp-gender'].forEach(id => document.getElementById(id).value = '');
+  ['L','R','S'].forEach(k => { document.getElementById(`pos-${k}`).checked = false; });
+}
+
+function submitPaddler() {
+  const name   = document.getElementById('inp-name').value.trim();
+  const weight = parseFloat(document.getElementById('inp-weight').value);
+  const gender = document.getElementById('inp-gender').value;
+  const positions = ['L','R','S'].filter(k => document.getElementById(`pos-${k}`).checked);
+
+  if (!name)               { document.getElementById('inp-name').focus(); return; }
+  if (!weight || weight <= 0) { document.getElementById('inp-weight').focus(); return; }
+
+  if (editingId) {
+    const idx = paddlers.findIndex(x => x.id === editingId);
+    if (idx >= 0) paddlers[idx] = { ...paddlers[idx], name, weight, gender, positions };
+    showToast(`${name} updated`, 'success');
+    cancelEdit();
+  } else {
+    paddlers.push({ id: uid(), name, weight, gender, positions });
+    showToast(`${name} added`, 'success');
+    clearForm();
+    document.getElementById('inp-name').focus();
+  }
+  render();
+  renderMgmtList();
+}
+
+function deletePaddler(pid) {
+  const p = paddlers.find(x => x.id === pid);
+  if (!confirm(`Remove ${p?.name || 'this paddler'} from the roster?`)) return;
+  if (editingId === pid) cancelEdit();
+  Object.keys(seats).forEach(k => { if (seats[k] === pid) seats[k] = null; });
+  paddlers = paddlers.filter(x => x.id !== pid);
+  render();
+  renderMgmtList();
+}
+
+// ── Render: main roster chips ─────────────────────────────────────────────
+function renderRosterChips() {
+  const list = document.getElementById('roster-chips');
   list.innerHTML = '';
   if (!paddlers.length) {
-    list.innerHTML = '<div style="color:#475569;font-size:0.8rem;text-align:center;padding:14px;">No paddlers yet</div>';
-    updateGenderCounts();
-    renderUnseated();
-    return;
+    list.innerHTML = '<div style="color:#475569;font-size:0.8rem;text-align:center;padding:14px 0;">No paddlers — tap Manage to add</div>';
+    updateGenderCounts(); renderUnseated(); return;
   }
   paddlers.forEach(p => {
     const isSeated = Object.values(seats).includes(p.id);
@@ -1132,15 +1100,11 @@ function renderRoster() {
           ${isSeated ? '<span class="chip-seated-label">✓ seated</span>' : ''}
         </div>
       </div>
-      <button class="btn btn-danger" title="Remove from roster" onclick="event.stopPropagation();deletePaddler('${p.id}')">✕</button>`;
+      <button class="icon-btn edit" title="Edit paddler" onclick="event.stopPropagation();editPaddler('${p.id}')">✏️</button>`;
 
     if (!isMobile()) {
-      div.addEventListener('dragstart', e => {
-        dragId = p.id;
-        div.classList.add('dragging');
-        e.dataTransfer.effectAllowed = 'move';
-      });
-      div.addEventListener('dragend', () => div.classList.remove('dragging'));
+      div.addEventListener('dragstart', e => { dragId = p.id; div.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+      div.addEventListener('dragend',   () => div.classList.remove('dragging'));
     }
     list.appendChild(div);
   });
@@ -1148,15 +1112,51 @@ function renderRoster() {
   renderUnseated();
 }
 
-// ── Render: unseated list (mobile) ────────────────────────────────────────
+// ── Render: roster management list (Page 2) ───────────────────────────────
+function renderMgmtList() {
+  const list = document.getElementById('mgmt-list');
+  list.innerHTML = '';
+  document.getElementById('mgmt-count').textContent = `${paddlers.length} paddler${paddlers.length !== 1 ? 's' : ''}`;
+  document.getElementById('roster-page-sub').textContent = `${paddlers.length} paddlers`;
+
+  if (!paddlers.length) {
+    list.innerHTML = '<div class="mgmt-empty">No paddlers yet. Use the form above to add them.</div>';
+    return;
+  }
+  paddlers.forEach(p => {
+    const isSeated = Object.values(seats).includes(p.id);
+    const gClass   = p.gender === 'M' ? 'male' : p.gender === 'F' ? 'female' : '';
+    const isEditing = editingId === p.id;
+    const div = document.createElement('div');
+    div.className = `mgmt-chip ${gClass}${isEditing ? ' editing-target' : ''}`;
+    div.innerHTML = `
+      <div class="mgmt-chip-info">
+        <div class="mgmt-chip-top">
+          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}"></span>` : ''}
+          <span class="mgmt-chip-name">${esc(p.name)}</span>
+        </div>
+        <div class="mgmt-chip-meta">
+          <span class="mgmt-chip-wt">${p.weight} kg</span>
+          ${(p.positions||[]).map(pos=>`<span class="pos-badge ${pos}">${pos}</span>`).join('')}
+          ${isSeated ? '<span class="mgmt-chip-seated">✓ seated</span>' : ''}
+        </div>
+      </div>
+      <div class="mgmt-chip-actions">
+        <button class="icon-btn edit" onclick="editPaddler('${p.id}')" title="Edit">✏️</button>
+        <button class="icon-btn del"  onclick="deletePaddler('${p.id}')" title="Delete">🗑️</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+// ── Render: unseated (mobile) ─────────────────────────────────────────────
 function renderUnseated() {
   const listEl = document.getElementById('unseated-list');
   if (!listEl) return;
   const unseated = paddlers.filter(p => !Object.values(seats).includes(p.id));
   listEl.innerHTML = '';
   if (!unseated.length && paddlers.length > 0) {
-    listEl.innerHTML = '<div class="all-seated-msg">✓ All paddlers are seated!</div>';
-    return;
+    listEl.innerHTML = '<div class="all-seated-msg">✓ All paddlers are seated!</div>'; return;
   }
   unseated.forEach(p => {
     const gClass = p.gender === 'M' ? 'male' : p.gender === 'F' ? 'female' : '';
@@ -1165,7 +1165,7 @@ function renderUnseated() {
     div.innerHTML = `
       <div class="unseated-chip-info">
         <div class="unseated-chip-name">
-          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}" style="display:inline-block;margin-right:4px;vertical-align:middle;"></span>` : ''}
+          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}"></span>` : ''}
           ${esc(p.name)}
         </div>
         <div class="unseated-chip-meta">
@@ -1177,16 +1177,58 @@ function renderUnseated() {
   });
 }
 
-function updateGenderCounts() {
-  const seatedIds = [];
+// ── Render: boat ──────────────────────────────────────────────────────────
+function renderBoat() {
+  const grid = document.getElementById('seats-grid');
+  grid.innerHTML = '';
   for (let r = 1; r <= ROWS; r++) {
-    if (seats[`L${r}`]) seatedIds.push(seats[`L${r}`]);
-    if (seats[`R${r}`]) seatedIds.push(seats[`R${r}`]);
+    const row = document.createElement('div');
+    row.className = 'seat-row';
+    row.innerHTML = seatHTML(`L${r}`,'left-seat') + `<div class="row-num">${r}</div>` + seatHTML(`R${r}`,'right-seat');
+    grid.appendChild(row);
   }
-  const seated = paddlers.filter(p => seatedIds.includes(p.id));
+  document.querySelectorAll('.seat[data-sid]').forEach(el => {
+    const sid = el.dataset.sid;
+    el.addEventListener('dragover',  e => { e.preventDefault(); highlightSeat(el, sid); });
+    el.addEventListener('dragleave', () => clearHighlight(el));
+    el.addEventListener('drop',      e => { e.preventDefault(); clearHighlight(el); handleDrop(sid); });
+    el.addEventListener('dragstart', e => { const pid = seats[sid]; if (pid) { dragId = pid; e.dataTransfer.effectAllowed = 'move'; } });
+    el.addEventListener('click',     e => { if (e.target.classList.contains('remove-btn')) return; if (isMobile()) openModal(sid); });
+    el.querySelector('.remove-btn')?.addEventListener('click', ev => { ev.stopPropagation(); removePaddlerFromSeat(sid); });
+  });
+  renderSpecialSeat('drummer');
+  renderSpecialSeat('steerer');
+  updateSummary();
+}
+
+function seatHTML(sid, cls) {
+  const p = paddlers.find(x => x.id === seats[sid]);
+  return `<div class="seat ${cls}${p ? ' occupied' : ''}" data-sid="${sid}" draggable="${p ? 'true' : 'false'}">
+    <span class="remove-btn">✕</span>
+    ${p ? `<div><div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div></div>` : `<span class="seat-empty-label">empty</span>`}
+  </div>`;
+}
+
+function renderSpecialSeat(sid) {
+  const el = document.getElementById(`seat-${sid}`);
+  if (!el) return;
+  const p = paddlers.find(x => x.id === seats[sid]);
+  const c = el.querySelector('.seat-content');
+  if (p) { el.classList.add('occupied'); c.innerHTML = `<div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div>`; }
+  else   { el.classList.remove('occupied'); c.textContent = sid === 'steerer' ? 'Tap / drop (S only)' : 'Tap / drop to assign'; }
+}
+
+// ── Gender counts ─────────────────────────────────────────────────────────
+function updateGenderCounts() {
+  const ids = [];
+  for (let r = 1; r <= ROWS; r++) {
+    if (seats[`L${r}`]) ids.push(seats[`L${r}`]);
+    if (seats[`R${r}`]) ids.push(seats[`R${r}`]);
+  }
+  const seated = paddlers.filter(p => ids.includes(p.id));
   document.getElementById('gsb-male').textContent   = seated.filter(p => p.gender === 'M').length;
   document.getElementById('gsb-female').textContent = seated.filter(p => p.gender === 'F').length;
-  document.getElementById('gsb-total').textContent  = seatedIds.length;
+  document.getElementById('gsb-total').textContent  = ids.length;
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────
@@ -1204,70 +1246,46 @@ function updateSummary() {
   document.getElementById('right-count').textContent = `${rC} paddler${rC !== 1 ? 's' : ''}`;
   document.getElementById('grand-total').textContent = `${(lW + rW).toFixed(1)} kg`;
   document.getElementById('seat-count').textContent  = `${filled} / ${ROWS * 2} seats filled`;
-
-  const tot = lW + rW;
-  const lP  = tot > 0 ? Math.round((lW / tot) * 100) : 50;
-  const rP  = 100 - lP;
+  const tot = lW + rW, lP = tot > 0 ? Math.round((lW/tot)*100) : 50, rP = 100-lP;
   document.getElementById('bar-left').style.width    = lP + '%';
   document.getElementById('bar-right').style.width   = rP + '%';
   document.getElementById('bar-left-pct').textContent  = lP + '%';
   document.getElementById('bar-right-pct').textContent = rP + '%';
-
   const diff = Math.abs(lW - rW);
   const diffEl = document.getElementById('diff-label');
-  if (tot === 0) {
-    diffEl.textContent = '—'; diffEl.className = 'diff-label';
-  } else {
+  if (tot === 0) { diffEl.textContent = '—'; diffEl.className = 'diff-label'; }
+  else {
     const side = lW > rW ? 'Left' : rW > lW ? 'Right' : '';
-    diffEl.textContent = diff === 0 ? '⚖ Perfectly balanced!'
-                       : `${side} heavier by ${diff.toFixed(1)} kg`;
-    diffEl.className = 'diff-label ' + (diff === 0 ? 'diff-good' : diff <= 10 ? 'diff-ok' : 'diff-bad');
+    diffEl.textContent = diff === 0 ? '⚖ Perfectly balanced!' : `${side} heavier by ${diff.toFixed(1)} kg`;
+    diffEl.className   = 'diff-label ' + (diff === 0 ? 'diff-good' : diff <= 10 ? 'diff-ok' : 'diff-bad');
   }
 }
 
 // ── Mutations ─────────────────────────────────────────────────────────────
-function addPaddler() {
-  const nEl = document.getElementById('inp-name');
-  const wEl = document.getElementById('inp-weight');
-  const gEl = document.getElementById('inp-gender');
-  const name   = nEl.value.trim();
-  const weight = parseFloat(wEl.value);
-  if (!name)               { nEl.focus(); return; }
-  if (!weight || weight <= 0) { wEl.focus(); return; }
-  const positions = ['L','R','S'].filter(k => document.getElementById(`pos-${k}`).checked);
-  paddlers.push({ id: uid(), name, weight, gender: gEl.value || '', positions });
-  nEl.value = ''; wEl.value = ''; gEl.value = '';
-  ['L','R','S'].forEach(k => { document.getElementById(`pos-${k}`).checked = false; });
-  nEl.focus();
-  render();
-}
-
-function deletePaddler(pid) {
-  const p = paddlers.find(x => x.id === pid);
-  if (isMobile() && !confirm(`Remove ${p?.name || 'this paddler'} from the roster?`)) return;
-  Object.keys(seats).forEach(k => { if (seats[k] === pid) seats[k] = null; });
-  paddlers = paddlers.filter(x => x.id !== pid);
-  render();
-}
-
-function removePaddlerFromSeat(sid) {
-  if (seats[sid]) { seats[sid] = null; render(); }
-}
+function removePaddlerFromSeat(sid) { if (seats[sid]) { seats[sid] = null; render(); } }
 
 function clearSeats() {
-  Object.keys(seats).forEach(k => seats[k] = null);
-  render();
+  if (!confirm('Clear all seats?')) return;
+  Object.keys(seats).forEach(k => seats[k] = null); render();
 }
 
 function clearAll() {
-  if (!confirm('Clear all paddlers and seats?')) return;
-  paddlers = []; initSeats(); render();
+  if (!confirm('Remove all paddlers and clear all seats?')) return;
+  paddlers = []; initSeats(); cancelEdit(); render(); renderMgmtList();
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show' + (type ? ` ${type}` : '');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = ''; }, 2400);
 }
 
 // ── Persistence ───────────────────────────────────────────────────────────
-function save() {
-  try { localStorage.setItem('vortex-v1', JSON.stringify({ paddlers, seats })); } catch(e) {}
-}
+function save() { try { localStorage.setItem('vortex-v1', JSON.stringify({ paddlers, seats })); } catch(e) {} }
 
 function load() {
   try {
@@ -1280,20 +1298,15 @@ function load() {
 function exportData() {
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob([JSON.stringify({ paddlers, seats }, null, 2)], { type:'application/json' }));
-  a.download = 'vortex-plan.json';
-  a.click();
+  a.download = 'vortex-plan.json'; a.click();
 }
 
 function importData(e) {
   const file = e.target.files[0]; if (!file) return;
   const r = new FileReader();
   r.onload = ev => {
-    try {
-      const d = JSON.parse(ev.target.result);
-      paddlers = d.paddlers || []; initSeats();
-      seats = { ...seats, ...(d.seats||{}) };
-      render(); save();
-    } catch { alert('Invalid JSON file'); }
+    try { const d = JSON.parse(ev.target.result); paddlers = d.paddlers||[]; initSeats(); seats = {...seats,...(d.seats||{})}; render(); renderMgmtList(); save(); }
+    catch { alert('Invalid JSON file'); }
   };
   r.readAsText(file); e.target.value = '';
 }
@@ -1301,12 +1314,13 @@ function importData(e) {
 // ── Helpers ───────────────────────────────────────────────────────────────
 function uid() { return Math.random().toString(36).slice(2,10); }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function render() { renderBoat(); renderRoster(); save(); }
 
+function render() { renderBoat(); renderRosterChips(); save(); }
+
+// Enter key shortcuts in form
 document.getElementById('inp-name').addEventListener('keydown',   e => { if (e.key==='Enter') document.getElementById('inp-weight').focus(); });
-document.getElementById('inp-weight').addEventListener('keydown', e => { if (e.key==='Enter') addPaddler(); });
+document.getElementById('inp-weight').addEventListener('keydown', e => { if (e.key==='Enter') submitPaddler(); });
 
-// Close modal on back button (Android)
 window.addEventListener('popstate', closeModal);
 
 // ── Boot ──────────────────────────────────────────────────────────────────
