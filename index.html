@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Vortex Seating Planner</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #0f172a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    padding: 16px;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: clamp(1.2rem, 4vw, 1.7rem);
+    color: #f8fafc;
+    margin-bottom: 4px;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: #94a3b8;
+    font-size: clamp(0.72rem, 2.5vw, 0.82rem);
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── Three-column desktop layout ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 270px 1fr 270px;
+    gap: 14px;
+    align-items: start;
+  }
+
+  /* ── Panel ── */
+  .panel {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid #334155;
+  }
+
+  .panel-title {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* ── Roster gender stat bar ── */
+  .roster-top {
+    margin-bottom: 10px;
+  }
+
+  .roster-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .gender-stat-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+
+  .gsb-cell {
+    background: #0f172a;
+    border-radius: 8px;
+    padding: 7px 6px;
+    text-align: center;
+    border: 1px solid #334155;
+  }
+
+  .gsb-cell.male  { border-color: #1e40af; }
+  .gsb-cell.female { border-color: #831843; }
+
+  .gsb-val {
+    font-size: 1.3rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .gsb-cell.male   .gsb-val { color: #60a5fa; }
+  .gsb-cell.female .gsb-val { color: #f472b6; }
+  .gsb-cell.total  .gsb-val { color: #e2e8f0; }
+
+  .gsb-lbl {
+    font-size: 0.62rem;
+    color: #64748b;
+    margin-top: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* ── Add form ── */
+  .add-paddler {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #334155;
+  }
+
+  .add-paddler input,
+  .add-paddler select {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 7px;
+    color: #f1f5f9;
+    padding: 9px 10px;
+    font-size: 0.85rem;
+    outline: none;
+    width: 100%;
+  }
+
+  .add-paddler input:focus,
+  .add-paddler select:focus { border-color: #60a5fa; }
+  .add-paddler input::placeholder { color: #475569; }
+  .add-paddler select option { background: #1e293b; }
+
+  .pos-checkboxes {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 2px 0;
+  }
+
+  .pos-check {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    cursor: pointer;
+    user-select: none;
+    min-height: 28px;
+  }
+
+  .pos-check input[type=checkbox] {
+    accent-color: #6366f1;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+
+  .pos-hint {
+    font-size: 0.68rem;
+    color: #475569;
+    margin-top: -3px;
+  }
+
+  /* ── Buttons ── */
+  .btn {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s;
+    white-space: nowrap;
+    touch-action: manipulation;
+  }
+
+  .btn:hover  { background: #1d4ed8; }
+  .btn:active { background: #1e40af; }
+
+  .btn-danger { background: #dc2626; font-size: 0.72rem; padding: 5px 9px; border-radius: 6px; }
+  .btn-danger:hover  { background: #b91c1c; }
+  .btn-danger:active { background: #991b1b; }
+
+  .btn-sm { background: #334155; font-size: 0.72rem; padding: 6px 10px; border-radius: 6px; }
+  .btn-sm:hover  { background: #475569; }
+  .btn-sm:active { background: #1e293b; }
+
+  /* ── Roster list ── */
+  .roster-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    max-height: 440px;
+    overflow-y: auto;
+    padding-right: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .roster-list::-webkit-scrollbar { width: 4px; }
+  .roster-list::-webkit-scrollbar-thumb { background: #334155; border-radius: 2px; }
+
+  /* ── Paddler chip ── */
+  .paddler-chip {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-left: 3px solid #334155;
+    border-radius: 8px;
+    padding: 8px 8px 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    cursor: grab;
+    transition: border-color 0.15s, opacity 0.15s;
+    user-select: none;
+    touch-action: none;
+  }
+
+  .paddler-chip:active  { cursor: grabbing; }
+  .paddler-chip.dragging { opacity: 0.3; }
+  .paddler-chip.seated  { border-color: #16a34a; border-left-color: #16a34a; background: #052e16; }
+  .paddler-chip.male    { border-left-color: #3b82f6; }
+  .paddler-chip.female  { border-left-color: #ec4899; }
+  .paddler-chip.male.seated   { border-left-color: #4ade80; }
+  .paddler-chip.female.seated { border-left-color: #4ade80; }
+
+  .chip-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+  .chip-top  { display: flex; align-items: center; gap: 5px; }
+  .chip-name { font-size: 0.88rem; font-weight: 600; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chip-bottom { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+  .chip-wt   { font-size: 0.72rem; color: #64748b; }
+  .chip-seated-label { font-size: 0.65rem; color: #4ade80; }
+
+  .gender-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .gender-dot.m { background: #3b82f6; }
+  .gender-dot.f { background: #ec4899; }
+
+  .pos-badge {
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .pos-badge.L { background: #1e3a5f; color: #93c5fd; }
+  .pos-badge.R { background: #4a044e; color: #f9a8d4; }
+  .pos-badge.S { background: #2e1065; color: #c4b5fd; }
+
+  /* ── Boat ── */
+  .boat-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .boat {
+    background: #1e293b;
+    border: 2px solid #334155;
+    border-radius: 16px;
+    padding: 14px 10px;
+    width: 100%;
+    max-width: 440px;
+  }
+
+  .boat-header {
+    text-align: center;
+    font-size: 0.68rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .special-seat-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  .special-seat {
+    background: #1e3a5f;
+    border: 2px dashed #3b82f6;
+    border-radius: 10px;
+    padding: 10px 14px;
+    min-width: 170px;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #93c5fd;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    touch-action: none;
+  }
+
+  .special-seat.drag-over         { border-style: solid; border-color: #60a5fa; background: #1e40af; }
+  .special-seat.drag-over-invalid { border-style: solid; border-color: #dc2626; background: #450a0a; }
+  .special-seat.occupied          { border-style: solid; background: #172554; border-color: #6366f1; color: #c7d2fe; }
+
+  .special-seat .seat-label {
+    font-size: 0.6rem;
+    color: #6366f1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .special-seat .remove-btn {
+    position: absolute; top: 4px; right: 6px;
+    font-size: 0.7rem; color: #ef4444; cursor: pointer;
+    opacity: 0; transition: opacity 0.15s;
+  }
+
+  .special-seat:hover .remove-btn { opacity: 1; }
+
+  /* Steerer theme */
+  #seat-steerer { background: #2e1065; border-color: #7c3aed; color: #c4b5fd; }
+  #seat-steerer .seat-label { color: #7c3aed; }
+  #seat-steerer.drag-over   { border-color: #a855f7; background: #3b0764; }
+  #seat-steerer.drag-over-invalid { border-color: #dc2626; background: #450a0a; }
+  #seat-steerer.occupied    { background: #1e0a50; border-color: #8b5cf6; }
+
+  /* ── Seat grid ── */
+  .row-header {
+    display: grid;
+    grid-template-columns: 1fr 36px 1fr;
+    align-items: center;
+    margin-bottom: 4px;
+    gap: 4px;
+  }
+
+  .row-header span {
+    font-size: 0.62rem;
+    color: #475569;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .seats-grid { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+
+  .seat-row {
+    display: grid;
+    grid-template-columns: 1fr 36px 1fr;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .row-num { font-size: 0.68rem; color: #64748b; text-align: center; font-weight: 700; }
+
+  .seat {
+    background: #0f172a;
+    border: 1.5px dashed #334155;
+    border-radius: 8px;
+    padding: 6px 6px;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    text-align: center;
+    touch-action: none;
+  }
+
+  .seat.left-seat  { border-color: #1e40af; }
+  .seat.right-seat { border-color: #831843; }
+
+  .seat.drag-over.left-seat  { border-style: solid; border-color: #3b82f6; background: #1e3a5f; }
+  .seat.drag-over.right-seat { border-style: solid; border-color: #ec4899; background: #4a044e; }
+  .seat.drag-over-invalid    { border-style: solid !important; border-color: #dc2626 !important; background: #450a0a !important; }
+
+  .seat.occupied { border-style: solid; cursor: grab; }
+  .seat.left-seat.occupied  { border-color: #3b82f6; background: #172554; }
+  .seat.right-seat.occupied { border-color: #ec4899; background: #2d0036; }
+
+  .seat-name { font-size: 0.75rem; font-weight: 600; color: #f1f5f9; line-height: 1.2; }
+  .seat-wt   { font-size: 0.65rem; color: #94a3b8; }
+  .seat-empty-label { font-size: 0.66rem; color: #334155; }
+
+  .seat .remove-btn {
+    position: absolute; top: 2px; right: 4px;
+    font-size: 0.65rem; color: #ef4444; cursor: pointer;
+    line-height: 1; opacity: 0; transition: opacity 0.15s;
+  }
+
+  .seat:hover .remove-btn { opacity: 1; }
+
+  /* ── Toast ── */
+  #toast {
+    position: fixed;
+    bottom: 20px; left: 50%;
+    transform: translateX(-50%) translateY(60px);
+    background: #7f1d1d;
+    color: #fca5a5;
+    border: 1px solid #dc2626;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    pointer-events: none;
+    transition: transform 0.22s ease, opacity 0.22s ease;
+    opacity: 0;
+    z-index: 9998;
+    text-align: center;
+    max-width: calc(100vw - 32px);
+  }
+
+  #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+  /* ── Summary ── */
+  .summary { display: flex; flex-direction: column; gap: 10px; }
+
+  .summary-weights { display: flex; flex-direction: column; gap: 10px; }
+
+  .weight-box {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 13px;
+    border: 1px solid #334155;
+    text-align: center;
+    flex: 1;
+  }
+
+  .weight-box.left  { border-color: #1e40af; }
+  .weight-box.right { border-color: #831843; }
+
+  .weight-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
+  .weight-box.left h3  { color: #60a5fa; }
+  .weight-box.right h3 { color: #f472b6; }
+
+  .weight-val { font-size: 1.9rem; font-weight: 700; line-height: 1; }
+  .weight-box.left .weight-val  { color: #93c5fd; }
+  .weight-box.right .weight-val { color: #f9a8d4; }
+  .weight-unit { font-size: 0.78rem; color: #64748b; }
+  .weight-sub  { font-size: 0.68rem; color: #64748b; margin-top: 3px; }
+
+  .balance-box {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 13px;
+    border: 1px solid #334155;
+  }
+
+  .balance-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 9px; text-align: center; }
+
+  .balance-bar-track {
+    background: #0f172a;
+    border-radius: 99px;
+    height: 13px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 5px;
+  }
+
+  .balance-bar-left  { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #2563eb, #60a5fa); border-radius: 99px; transition: width 0.3s ease; }
+  .balance-bar-right { position: absolute; right: 0; top: 0; bottom: 0; background: linear-gradient(270deg, #db2777, #f472b6); border-radius: 99px; transition: width 0.3s ease; }
+
+  .balance-labels { display: flex; justify-content: space-between; font-size: 0.7rem; color: #64748b; }
+
+  .diff-label { text-align: center; font-size: 0.8rem; font-weight: 600; margin-top: 7px; }
+  .diff-good { color: #4ade80; }
+  .diff-ok   { color: #facc15; }
+  .diff-bad  { color: #f87171; }
+
+  .total-box {
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 11px 14px;
+    border: 1px solid #334155;
+    text-align: center;
+  }
+
+  .total-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 3px; }
+  .total-val { font-size: 1.35rem; font-weight: 700; color: #e2e8f0; }
+
+  /* ── Seat count ── */
+  .seat-count { text-align: center; font-size: 0.72rem; color: #64748b; margin-top: 6px; }
+
+  /* ── Bottom actions ── */
+  .actions { display: flex; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
+  .actions .btn { flex: 1; min-width: 70px; }
+
+  .io-area { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+  .io-area .btn { flex: 1; }
+
+  /* ── Touch device: always show remove buttons ── */
+  @media (hover: none) {
+    .seat .remove-btn,
+    .special-seat .remove-btn { opacity: 0.7; }
+  }
+
+  /* ── Mobile layout ── */
+  @media (max-width: 800px) {
+    body { padding: 10px; }
+
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    /* Reorder: Boat → Summary → Roster */
+    .boat-wrapper { order: 1; }
+    .summary      { order: 2; }
+    #roster-panel { order: 3; }
+
+    /* Weights side-by-side on mobile */
+    .summary-weights { flex-direction: row; }
+
+    .weight-val { font-size: 1.5rem; }
+
+    /* Bigger seats for touch */
+    .seat { min-height: 52px; }
+
+    /* Remove roster max-height on mobile — let it expand */
+    .roster-list { max-height: none; }
+
+    /* Larger chip padding for touch */
+    .paddler-chip { padding: 10px 8px 10px 11px; }
+
+    .boat { max-width: 100%; }
+
+    /* Row number smaller column */
+    .seat-row, .row-header {
+      grid-template-columns: 1fr 28px 1fr;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .gsb-val { font-size: 1.1rem; }
+    .gsb-lbl { font-size: 0.58rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>🌀 Vortex Seating Planner</h1>
+<p class="subtitle">
+  Tap &amp; drag paddlers onto seats &nbsp;·&nbsp;
+  <span style="color:#60a5fa">■ Left</span>&nbsp;
+  <span style="color:#f472b6">■ Right</span>&nbsp;
+  <span style="color:#a855f7">■ Steer</span>
+  &nbsp;·&nbsp; Badges restrict seat placement
+</p>
+
+<div id="toast"></div>
+
+<div class="layout">
+
+  <!-- ── Roster ── -->
+  <div class="panel" id="roster-panel">
+    <div class="roster-top">
+      <div class="roster-title-row">
+        <span class="panel-title">Paddler Roster</span>
+      </div>
+      <!-- Gender stat bar -->
+      <div class="gender-stat-bar">
+        <div class="gsb-cell male">
+          <div class="gsb-val" id="gsb-male">0</div>
+          <div class="gsb-lbl">♂ Males</div>
+        </div>
+        <div class="gsb-cell female">
+          <div class="gsb-val" id="gsb-female">0</div>
+          <div class="gsb-lbl">♀ Females</div>
+        </div>
+        <div class="gsb-cell total">
+          <div class="gsb-val" id="gsb-total">0</div>
+          <div class="gsb-lbl">Seated / 20</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add paddler form -->
+    <div class="add-paddler">
+      <input id="inp-name" type="text" placeholder="Name" maxlength="24" autocomplete="off">
+      <div style="display:flex;gap:6px;">
+        <input id="inp-weight" type="number" placeholder="Weight (kg)" min="1" max="300" step="0.5" style="flex:1" inputmode="decimal">
+        <select id="inp-gender" style="width:64px;flex-shrink:0;">
+          <option value="">—</option>
+          <option value="M">♂ M</option>
+          <option value="F">♀ F</option>
+        </select>
+      </div>
+      <div class="pos-checkboxes">
+        <label class="pos-check"><input type="checkbox" id="pos-L"> <span style="color:#93c5fd">L</span> Left</label>
+        <label class="pos-check"><input type="checkbox" id="pos-R"> <span style="color:#f9a8d4">R</span> Right</label>
+        <label class="pos-check"><input type="checkbox" id="pos-S"> <span style="color:#c4b5fd">S</span> Steer</label>
+      </div>
+      <div class="pos-hint">No boxes checked = can sit anywhere</div>
+      <button class="btn" onclick="addPaddler()">+ Add Paddler</button>
+    </div>
+
+    <div class="roster-list" id="roster-list"></div>
+
+    <div class="io-area">
+      <button class="btn btn-sm" onclick="exportData()" style="background:#0f4c75;">Export</button>
+      <button class="btn btn-sm" onclick="document.getElementById('imp').click()" style="background:#0f4c75;">Import</button>
+      <input type="file" id="imp" accept=".json" style="display:none" onchange="importData(event)">
+    </div>
+    <div class="actions">
+      <button class="btn btn-sm" onclick="clearSeats()" style="background:#7c2d12;">Clear Seats</button>
+      <button class="btn btn-danger" onclick="clearAll()">Clear All</button>
+    </div>
+  </div>
+
+  <!-- ── Boat ── -->
+  <div class="boat-wrapper">
+    <div class="boat">
+      <div class="boat-header">🥁 Front — Drummer</div>
+
+      <div class="special-seat-row">
+        <div class="special-seat" id="seat-drummer" data-sid="drummer"
+          ondragover="dragOverEl(event,'drummer')" ondragleave="dragLeaveEl(event)"
+          ondrop="dropEl(event,'drummer')">
+          <span class="seat-label">Drummer (unrestricted)</span>
+          <span class="remove-btn" onclick="removePaddlerFromSeat('drummer')">✕</span>
+          <span class="seat-content">Drop here</span>
+        </div>
+      </div>
+
+      <div class="row-header">
+        <span>Left</span>
+        <span>#</span>
+        <span>Right</span>
+      </div>
+
+      <div class="seats-grid" id="seats-grid"></div>
+
+      <div class="boat-header" style="margin-top:8px;">🚣 Back — Steersperson</div>
+      <div class="special-seat-row">
+        <div class="special-seat" id="seat-steerer" data-sid="steerer"
+          ondragover="dragOverEl(event,'steerer')" ondragleave="dragLeaveEl(event)"
+          ondrop="dropEl(event,'steerer')">
+          <span class="seat-label">Steersperson · S position only</span>
+          <span class="remove-btn" onclick="removePaddlerFromSeat('steerer')">✕</span>
+          <span class="seat-content">Drop here</span>
+        </div>
+      </div>
+    </div>
+    <div class="seat-count" id="seat-count">0 / 20 paddler seats filled</div>
+  </div>
+
+  <!-- ── Summary ── -->
+  <div class="summary">
+    <div class="summary-weights">
+      <div class="weight-box left">
+        <h3>⬅ Left</h3>
+        <div><span class="weight-val" id="left-total">0</span> <span class="weight-unit">kg</span></div>
+        <div class="weight-sub" id="left-count">0 paddlers</div>
+      </div>
+      <div class="weight-box right">
+        <h3>Right ➡</h3>
+        <div><span class="weight-val" id="right-total">0</span> <span class="weight-unit">kg</span></div>
+        <div class="weight-sub" id="right-count">0 paddlers</div>
+      </div>
+    </div>
+    <div class="balance-box">
+      <h3>Balance</h3>
+      <div class="balance-bar-track">
+        <div class="balance-bar-left"  id="bar-left"  style="width:50%"></div>
+        <div class="balance-bar-right" id="bar-right" style="width:50%"></div>
+      </div>
+      <div class="balance-labels">
+        <span id="bar-left-pct">50%</span>
+        <span id="bar-right-pct">50%</span>
+      </div>
+      <div class="diff-label" id="diff-label">—</div>
+    </div>
+    <div class="total-box">
+      <h3>Total Weight (paddlers)</h3>
+      <div class="total-val" id="grand-total">0 kg</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── Initial data ──────────────────────────────────────────────────────────
+const INITIAL_PADDLERS = [
+  { name:'Ginny',      weight:54,  gender:'F', positions:['R'] },
+  { name:'Andrea',     weight:66,  gender:'F', positions:['R'] },
+  { name:'Rita',       weight:50,  gender:'F', positions:['L'] },
+  { name:'Nicole',     weight:51,  gender:'F', positions:['L'] },
+  { name:'Alma',       weight:51,  gender:'F', positions:['R'] },
+  { name:'Deonic',     weight:48,  gender:'F', positions:['L'] },
+  { name:'Iris',       weight:55,  gender:'F', positions:['L'] },
+  { name:'Gabriella',  weight:70,  gender:'F', positions:['R'] },
+  { name:'Lily',       weight:58,  gender:'F', positions:['L','R'] },
+  { name:'Panky',      weight:50,  gender:'F', positions:['R'] },
+  { name:'Tracy',      weight:59,  gender:'F', positions:['L'] },
+  { name:'Jacqueline', weight:58,  gender:'F', positions:['L'] },
+  { name:'Grace',      weight:64,  gender:'F', positions:['R'] },
+  { name:'Stephen',    weight:98,  gender:'M', positions:['L'] },
+  { name:'Chi Shing',  weight:90,  gender:'M', positions:['L','R','S'] },
+  { name:'Dixon',      weight:82,  gender:'M', positions:['R'] },
+  { name:'Aaron',      weight:60,  gender:'M', positions:['L'] },
+  { name:'Eric',       weight:86,  gender:'M', positions:['L','R','S'] },
+  { name:'Michael',    weight:75,  gender:'M', positions:['L'] },
+  { name:'Thomas',     weight:80,  gender:'M', positions:['L'] },
+  { name:'Nick',       weight:73,  gender:'M', positions:['L','R','S'] },
+  { name:'Nathan',     weight:74,  gender:'M', positions:['R'] },
+  { name:'Felix',      weight:91,  gender:'M', positions:['R'] },
+  { name:'Ernest',     weight:77,  gender:'M', positions:['L','R','S'] },
+  { name:'Hei',        weight:90,  gender:'M', positions:['L'] },
+  { name:'Beson',      weight:99,  gender:'M', positions:['R'] },
+];
+
+// ── State ─────────────────────────────────────────────────────────────────
+let paddlers = [];
+let seats    = {};
+let dragId   = null;
+
+const ROWS    = 10;
+const SPECIAL = ['drummer','steerer'];
+
+function initSeats() {
+  for (let r = 1; r <= ROWS; r++) { seats[`L${r}`] = null; seats[`R${r}`] = null; }
+  SPECIAL.forEach(s => { seats[s] = null; });
+}
+initSeats();
+
+// ── Restriction check ─────────────────────────────────────────────────────
+function canDrop(pid, sid) {
+  const p = paddlers.find(x => x.id === pid);
+  if (!p || !p.positions || p.positions.length === 0) return true;
+  if (sid === 'drummer')         return true;
+  if (sid === 'steerer')         return p.positions.includes('S');
+  if (sid.startsWith('L'))      return p.positions.includes('L');
+  if (sid.startsWith('R'))      return p.positions.includes('R');
+  return true;
+}
+
+// ── Core drop handler ─────────────────────────────────────────────────────
+function handleDrop(sid) {
+  if (!dragId) return;
+  if (!canDrop(dragId, sid)) {
+    const p = paddlers.find(x => x.id === dragId);
+    const allowed = (p?.positions || []).join('/') || 'unrestricted';
+    const label   = sid === 'steerer' ? 'Steersperson'
+                  : sid.startsWith('L') ? 'Left side'
+                  : sid.startsWith('R') ? 'Right side' : sid;
+    showToast(`${p?.name} can't sit ${label} · allowed: ${allowed}`);
+    dragId = null;
+    return;
+  }
+  Object.keys(seats).forEach(k => { if (seats[k] === dragId) seats[k] = null; });
+  seats[sid] = dragId;
+  dragId = null;
+  render();
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2400);
+}
+
+// ── Render: boat ──────────────────────────────────────────────────────────
+function renderBoat() {
+  const grid = document.getElementById('seats-grid');
+  grid.innerHTML = '';
+  for (let r = 1; r <= ROWS; r++) {
+    const row = document.createElement('div');
+    row.className = 'seat-row';
+    row.innerHTML = seatHTML(`L${r}`, 'left-seat') +
+      `<div class="row-num">${r}</div>` +
+      seatHTML(`R${r}`, 'right-seat');
+    grid.appendChild(row);
+  }
+
+  document.querySelectorAll('.seat[data-sid]').forEach(el => {
+    const sid = el.dataset.sid;
+    el.addEventListener('dragover',  e => { e.preventDefault(); highlightSeat(el, sid); });
+    el.addEventListener('dragleave', e => clearHighlight(el));
+    el.addEventListener('drop',      e => { e.preventDefault(); clearHighlight(el); handleDrop(sid); });
+    el.addEventListener('dragstart', e => {
+      const pid = seats[sid];
+      if (pid) { dragId = pid; e.dataTransfer.effectAllowed = 'move'; }
+    });
+    el.querySelector('.remove-btn')?.addEventListener('click', ev => {
+      ev.stopPropagation(); removePaddlerFromSeat(sid);
+    });
+  });
+
+  renderSpecialSeat('drummer');
+  renderSpecialSeat('steerer');
+  updateSummary();
+}
+
+function seatHTML(sid, cls) {
+  const p = paddlers.find(x => x.id === seats[sid]);
+  return `<div class="seat ${cls}${p ? ' occupied' : ''}" data-sid="${sid}" draggable="${p ? 'true' : 'false'}">
+    <span class="remove-btn">✕</span>
+    ${p ? `<div><div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div></div>`
+        : `<span class="seat-empty-label">empty</span>`}
+  </div>`;
+}
+
+function renderSpecialSeat(sid) {
+  const el = document.getElementById(`seat-${sid}`);
+  if (!el) return;
+  const p = paddlers.find(x => x.id === seats[sid]);
+  const c = el.querySelector('.seat-content');
+  if (p) {
+    el.classList.add('occupied');
+    c.innerHTML = `<div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div>`;
+  } else {
+    el.classList.remove('occupied');
+    c.textContent = sid === 'steerer' ? 'Drop here (S only)' : 'Drop here';
+  }
+}
+
+function highlightSeat(el, sid) {
+  el.classList.remove('drag-over', 'drag-over-invalid');
+  el.classList.add(dragId && canDrop(dragId, sid) ? 'drag-over' : 'drag-over-invalid');
+}
+
+function clearHighlight(el) {
+  el.classList.remove('drag-over', 'drag-over-invalid');
+}
+
+// ── Mouse drag: special seats (inline handlers) ───────────────────────────
+function dragOverEl(e, sid) {
+  e.preventDefault();
+  highlightSeat(e.currentTarget, sid);
+}
+
+function dragLeaveEl(e) {
+  clearHighlight(e.currentTarget);
+}
+
+function dropEl(e, sid) {
+  e.preventDefault();
+  clearHighlight(e.currentTarget);
+  handleDrop(sid);
+}
+
+// Drop onto roster panel = unassign
+document.getElementById('roster-panel').addEventListener('dragover', e => e.preventDefault());
+document.getElementById('roster-panel').addEventListener('drop', e => {
+  e.preventDefault();
+  if (!dragId) return;
+  Object.keys(seats).forEach(k => { if (seats[k] === dragId) seats[k] = null; });
+  dragId = null;
+  render();
+});
+
+// ── Render: roster ────────────────────────────────────────────────────────
+function renderRoster() {
+  const list = document.getElementById('roster-list');
+  list.innerHTML = '';
+  if (!paddlers.length) {
+    list.innerHTML = '<div style="color:#475569;font-size:0.8rem;text-align:center;padding:14px;">No paddlers yet</div>';
+    updateGenderCounts();
+    return;
+  }
+  paddlers.forEach(p => {
+    const isSeated = Object.values(seats).includes(p.id);
+    const gClass   = p.gender === 'M' ? 'male' : p.gender === 'F' ? 'female' : '';
+    const div = document.createElement('div');
+    div.className = `paddler-chip ${gClass}${isSeated ? ' seated' : ''}`;
+    div.draggable = true;
+    div.dataset.pid = p.id;
+    div.innerHTML = `
+      <div class="chip-left">
+        <div class="chip-top">
+          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}"></span>` : ''}
+          <span class="chip-name">${esc(p.name)}</span>
+        </div>
+        <div class="chip-bottom">
+          <span class="chip-wt">${p.weight} kg</span>
+          ${(p.positions||[]).map(pos=>`<span class="pos-badge ${pos}">${pos}</span>`).join('')}
+          ${isSeated ? '<span class="chip-seated-label">✓ seated</span>' : ''}
+        </div>
+      </div>
+      <button class="btn btn-danger" onclick="event.stopPropagation();deletePaddler('${p.id}')">✕</button>`;
+    div.addEventListener('dragstart', e => {
+      dragId = p.id;
+      div.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    div.addEventListener('dragend', () => div.classList.remove('dragging'));
+    list.appendChild(div);
+  });
+  updateGenderCounts();
+}
+
+function updateGenderCounts() {
+  const seatedIds = [];
+  for (let r = 1; r <= ROWS; r++) {
+    if (seats[`L${r}`]) seatedIds.push(seats[`L${r}`]);
+    if (seats[`R${r}`]) seatedIds.push(seats[`R${r}`]);
+  }
+  const seated = paddlers.filter(p => seatedIds.includes(p.id));
+  document.getElementById('gsb-male').textContent   = seated.filter(p => p.gender === 'M').length;
+  document.getElementById('gsb-female').textContent = seated.filter(p => p.gender === 'F').length;
+  document.getElementById('gsb-total').textContent  = seatedIds.length;
+}
+
+// ── Summary ───────────────────────────────────────────────────────────────
+function updateSummary() {
+  let lW = 0, rW = 0, lC = 0, rC = 0, filled = 0;
+  for (let r = 1; r <= ROWS; r++) {
+    const lp = paddlers.find(x => x.id === seats[`L${r}`]);
+    const rp = paddlers.find(x => x.id === seats[`R${r}`]);
+    if (lp) { lW += lp.weight; lC++; filled++; }
+    if (rp) { rW += rp.weight; rC++; filled++; }
+  }
+  document.getElementById('left-total').textContent  = lW.toFixed(1);
+  document.getElementById('right-total').textContent = rW.toFixed(1);
+  document.getElementById('left-count').textContent  = `${lC} paddler${lC !== 1 ? 's' : ''}`;
+  document.getElementById('right-count').textContent = `${rC} paddler${rC !== 1 ? 's' : ''}`;
+  document.getElementById('grand-total').textContent = `${(lW + rW).toFixed(1)} kg`;
+  document.getElementById('seat-count').textContent  = `${filled} / ${ROWS * 2} seats filled`;
+
+  const tot = lW + rW;
+  const lP  = tot > 0 ? Math.round((lW / tot) * 100) : 50;
+  const rP  = 100 - lP;
+  document.getElementById('bar-left').style.width    = lP + '%';
+  document.getElementById('bar-right').style.width   = rP + '%';
+  document.getElementById('bar-left-pct').textContent  = lP + '%';
+  document.getElementById('bar-right-pct').textContent = rP + '%';
+
+  const diff = Math.abs(lW - rW);
+  const diffEl = document.getElementById('diff-label');
+  if (tot === 0) {
+    diffEl.textContent = '—'; diffEl.className = 'diff-label';
+  } else {
+    const side = lW > rW ? 'Left' : rW > lW ? 'Right' : '';
+    diffEl.textContent = diff === 0 ? '⚖ Perfectly balanced!'
+                       : `${side} heavier by ${diff.toFixed(1)} kg`;
+    diffEl.className = 'diff-label ' + (diff === 0 ? 'diff-good' : diff <= 10 ? 'diff-ok' : 'diff-bad');
+  }
+}
+
+// ── Mutations ─────────────────────────────────────────────────────────────
+function addPaddler() {
+  const nEl = document.getElementById('inp-name');
+  const wEl = document.getElementById('inp-weight');
+  const gEl = document.getElementById('inp-gender');
+  const name   = nEl.value.trim();
+  const weight = parseFloat(wEl.value);
+  if (!name)   { nEl.focus(); return; }
+  if (!weight || weight <= 0) { wEl.focus(); return; }
+  const positions = ['L','R','S'].filter(k => document.getElementById(`pos-${k}`).checked);
+  paddlers.push({ id: uid(), name, weight, gender: gEl.value || '', positions });
+  nEl.value = ''; wEl.value = ''; gEl.value = '';
+  ['L','R','S'].forEach(k => { document.getElementById(`pos-${k}`).checked = false; });
+  nEl.focus();
+  render();
+}
+
+function deletePaddler(pid) {
+  Object.keys(seats).forEach(k => { if (seats[k] === pid) seats[k] = null; });
+  paddlers = paddlers.filter(p => p.id !== pid);
+  render();
+}
+
+function removePaddlerFromSeat(sid) {
+  if (seats[sid]) { seats[sid] = null; render(); }
+}
+
+function clearSeats() {
+  Object.keys(seats).forEach(k => seats[k] = null);
+  render();
+}
+
+function clearAll() {
+  if (!confirm('Clear all paddlers and seats?')) return;
+  paddlers = [];
+  initSeats();
+  render();
+}
+
+// ── Touch drag & drop ─────────────────────────────────────────────────────
+let touchGhost     = null;
+let touchOffX      = 0;
+let touchOffY      = 0;
+let touchHighlight = null;
+
+document.addEventListener('touchstart', e => {
+  // Let buttons and remove spans handle their own events
+  if (e.target.closest('button, .remove-btn')) return;
+
+  const chip         = e.target.closest('.paddler-chip[data-pid]');
+  const occupiedSeat = e.target.closest('.seat.occupied[data-sid]');
+  const source       = chip || occupiedSeat;
+  if (!source) return;
+
+  e.preventDefault();
+  dragId = chip ? chip.dataset.pid : seats[occupiedSeat.dataset.sid];
+  if (!dragId) return;
+
+  const rect  = source.getBoundingClientRect();
+  const touch = e.touches[0];
+  touchOffX = touch.clientX - rect.left;
+  touchOffY = touch.clientY - rect.top;
+
+  const ghost = source.cloneNode(true);
+  ghost.removeAttribute('id');
+  Object.assign(ghost.style, {
+    position: 'fixed',
+    left: rect.left + 'px',
+    top:  rect.top  + 'px',
+    width: rect.width + 'px',
+    pointerEvents: 'none',
+    zIndex: '9999',
+    opacity: '0.85',
+    transform: 'scale(1.05)',
+    transition: 'none',
+    boxShadow: '0 8px 28px rgba(0,0,0,0.6)',
+    borderRadius: '8px',
+  });
+  document.body.appendChild(ghost);
+  touchGhost = ghost;
+  touchGhost._src = source;
+  source.style.opacity = '0.25';
+}, { passive: false });
+
+document.addEventListener('touchmove', e => {
+  if (!touchGhost || !dragId) return;
+  e.preventDefault();
+  const touch = e.touches[0];
+  touchGhost.style.left = (touch.clientX - touchOffX) + 'px';
+  touchGhost.style.top  = (touch.clientY - touchOffY) + 'px';
+
+  touchGhost.style.display = 'none';
+  const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  touchGhost.style.display = '';
+
+  const newTarget = el?.closest('.seat[data-sid], .special-seat[data-sid]') || null;
+
+  if (touchHighlight && touchHighlight !== newTarget) {
+    clearHighlight(touchHighlight);
+    touchHighlight = null;
+  }
+  if (newTarget && newTarget !== touchHighlight) {
+    highlightSeat(newTarget, newTarget.dataset.sid);
+    touchHighlight = newTarget;
+  }
+}, { passive: false });
+
+function endTouch(e) {
+  if (!touchGhost || !dragId) return;
+  e.preventDefault();
+
+  const touch = e.changedTouches[0];
+
+  if (touchGhost._src) touchGhost._src.style.opacity = '';
+  touchGhost.remove();
+  touchGhost = null;
+
+  if (touchHighlight) { clearHighlight(touchHighlight); touchHighlight = null; }
+
+  touchGhost?.remove();
+
+  touchGhost = null;
+  const el = document.elementFromPoint(touch.clientX, touch.clientY);
+  const target = el?.closest('.seat[data-sid], .special-seat[data-sid]');
+
+  if (target) {
+    handleDrop(target.dataset.sid);
+  } else if (el?.closest('#roster-panel')) {
+    Object.keys(seats).forEach(k => { if (seats[k] === dragId) seats[k] = null; });
+    dragId = null;
+    render();
+  } else {
+    dragId = null;
+  }
+}
+
+document.addEventListener('touchend',    endTouch, { passive: false });
+document.addEventListener('touchcancel', e => {
+  if (touchGhost?._src) touchGhost._src.style.opacity = '';
+  touchGhost?.remove(); touchGhost = null;
+  if (touchHighlight) { clearHighlight(touchHighlight); touchHighlight = null; }
+  dragId = null;
+});
+
+// ── Persistence ───────────────────────────────────────────────────────────
+function save() {
+  try { localStorage.setItem('vortex-v1', JSON.stringify({ paddlers, seats })); } catch(e) {}
+}
+
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem('vortex-v1') || 'null');
+    if (d?.paddlers?.length) { paddlers = d.paddlers; seats = { ...seats, ...(d.seats||{}) }; return true; }
+  } catch(e) {}
+  return false;
+}
+
+function exportData() {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify({ paddlers, seats }, null, 2)], { type:'application/json' }));
+  a.download = 'vortex-plan.json';
+  a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      paddlers = d.paddlers || [];
+      initSeats();
+      seats = { ...seats, ...(d.seats||{}) };
+      render(); save();
+    } catch { alert('Invalid JSON file'); }
+  };
+  r.readAsText(file);
+  e.target.value = '';
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function uid() { return Math.random().toString(36).slice(2,10); }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function render() { renderBoat(); renderRoster(); save(); }
+
+document.getElementById('inp-name').addEventListener('keydown',   e => { if (e.key==='Enter') document.getElementById('inp-weight').focus(); });
+document.getElementById('inp-weight').addEventListener('keydown', e => { if (e.key==='Enter') addPaddler(); });
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+if (!load()) paddlers = INITIAL_PADDLERS.map(p => ({ ...p, id: uid() }));
+render();
+</script>
+</body>
+</html>
