@@ -32,7 +32,7 @@
     line-height: 1.6;
   }
 
-  /* ── Three-column desktop layout ── */
+  /* ── Layout ── */
   .layout {
     display: grid;
     grid-template-columns: 270px 1fr 270px;
@@ -57,9 +57,7 @@
   }
 
   /* ── Roster gender stat bar ── */
-  .roster-top {
-    margin-bottom: 10px;
-  }
+  .roster-top { margin-bottom: 10px; }
 
   .roster-title-row {
     display: flex;
@@ -82,26 +80,14 @@
     border: 1px solid #334155;
   }
 
-  .gsb-cell.male  { border-color: #1e40af; }
+  .gsb-cell.male   { border-color: #1e40af; }
   .gsb-cell.female { border-color: #831843; }
 
-  .gsb-val {
-    font-size: 1.3rem;
-    font-weight: 700;
-    line-height: 1;
-  }
-
+  .gsb-val { font-size: 1.3rem; font-weight: 700; line-height: 1; }
   .gsb-cell.male   .gsb-val { color: #60a5fa; }
   .gsb-cell.female .gsb-val { color: #f472b6; }
   .gsb-cell.total  .gsb-val { color: #e2e8f0; }
-
-  .gsb-lbl {
-    font-size: 0.62rem;
-    color: #64748b;
-    margin-top: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-  }
+  .gsb-lbl { font-size: 0.62rem; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: 0.3px; }
 
   /* ── Add form ── */
   .add-paddler {
@@ -130,50 +116,22 @@
   .add-paddler input::placeholder { color: #475569; }
   .add-paddler select option { background: #1e293b; }
 
-  .pos-checkboxes {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    padding: 2px 0;
-  }
+  .pos-checkboxes { display: flex; gap: 10px; flex-wrap: wrap; padding: 2px 0; }
 
   .pos-check {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.8rem;
-    color: #94a3b8;
-    cursor: pointer;
-    user-select: none;
-    min-height: 28px;
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.8rem; color: #94a3b8; cursor: pointer;
+    user-select: none; min-height: 28px;
   }
 
-  .pos-check input[type=checkbox] {
-    accent-color: #6366f1;
-    width: 15px;
-    height: 15px;
-    cursor: pointer;
-  }
-
-  .pos-hint {
-    font-size: 0.68rem;
-    color: #475569;
-    margin-top: -3px;
-  }
+  .pos-check input[type=checkbox] { accent-color: #6366f1; width: 15px; height: 15px; cursor: pointer; }
+  .pos-hint { font-size: 0.68rem; color: #475569; margin-top: -3px; }
 
   /* ── Buttons ── */
   .btn {
-    background: #2563eb;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 14px;
-    font-size: 0.85rem;
-    cursor: pointer;
-    font-weight: 600;
-    transition: background 0.15s;
-    white-space: nowrap;
-    touch-action: manipulation;
+    background: #2563eb; color: #fff; border: none; border-radius: 8px;
+    padding: 10px 14px; font-size: 0.85rem; cursor: pointer; font-weight: 600;
+    transition: background 0.15s; white-space: nowrap; touch-action: manipulation;
   }
 
   .btn:hover  { background: #1d4ed8; }
@@ -181,20 +139,14 @@
 
   .btn-danger { background: #dc2626; font-size: 0.72rem; padding: 5px 9px; border-radius: 6px; }
   .btn-danger:hover  { background: #b91c1c; }
-  .btn-danger:active { background: #991b1b; }
 
   .btn-sm { background: #334155; font-size: 0.72rem; padding: 6px 10px; border-radius: 6px; }
-  .btn-sm:hover  { background: #475569; }
-  .btn-sm:active { background: #1e293b; }
+  .btn-sm:hover { background: #475569; }
 
   /* ── Roster list ── */
   .roster-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    max-height: 440px;
-    overflow-y: auto;
-    padding-right: 2px;
+    display: flex; flex-direction: column; gap: 5px;
+    max-height: 440px; overflow-y: auto; padding-right: 2px;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -208,14 +160,10 @@
     border-left: 3px solid #334155;
     border-radius: 8px;
     padding: 8px 8px 8px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
+    display: flex; align-items: center; justify-content: space-between; gap: 6px;
     cursor: grab;
     transition: border-color 0.15s, opacity 0.15s;
     user-select: none;
-    touch-action: none;
   }
 
   .paddler-chip:active  { cursor: grabbing; }
@@ -226,86 +174,53 @@
   .paddler-chip.male.seated   { border-left-color: #4ade80; }
   .paddler-chip.female.seated { border-left-color: #4ade80; }
 
-  .chip-left { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
-  .chip-top  { display: flex; align-items: center; gap: 5px; }
-  .chip-name { font-size: 0.88rem; font-weight: 600; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .chip-left  { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
+  .chip-top   { display: flex; align-items: center; gap: 5px; }
+  .chip-name  { font-size: 0.88rem; font-weight: 600; color: #f1f5f9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .chip-bottom { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-  .chip-wt   { font-size: 0.72rem; color: #64748b; }
+  .chip-wt    { font-size: 0.72rem; color: #64748b; }
   .chip-seated-label { font-size: 0.65rem; color: #4ade80; }
 
   .gender-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .gender-dot.m { background: #3b82f6; }
   .gender-dot.f { background: #ec4899; }
 
-  .pos-badge {
-    font-size: 0.6rem;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
-    flex-shrink: 0;
-  }
-
+  .pos-badge { font-size: 0.6rem; font-weight: 700; padding: 1px 5px; border-radius: 3px; flex-shrink: 0; }
   .pos-badge.L { background: #1e3a5f; color: #93c5fd; }
   .pos-badge.R { background: #4a044e; color: #f9a8d4; }
   .pos-badge.S { background: #2e1065; color: #c4b5fd; }
 
   /* ── Boat ── */
-  .boat-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  .boat-wrapper { display: flex; flex-direction: column; align-items: center; }
 
   .boat {
-    background: #1e293b;
-    border: 2px solid #334155;
-    border-radius: 16px;
-    padding: 14px 10px;
-    width: 100%;
-    max-width: 440px;
+    background: #1e293b; border: 2px solid #334155; border-radius: 16px;
+    padding: 14px 10px; width: 100%; max-width: 440px;
   }
 
   .boat-header {
-    text-align: center;
-    font-size: 0.68rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
+    text-align: center; font-size: 0.68rem; color: #64748b;
+    text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;
   }
 
-  .special-seat-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 10px;
-  }
+  .special-seat-row { display: flex; justify-content: center; margin-bottom: 10px; }
 
   .special-seat {
-    background: #1e3a5f;
-    border: 2px dashed #3b82f6;
-    border-radius: 10px;
-    padding: 10px 14px;
-    min-width: 170px;
-    text-align: center;
-    font-size: 0.8rem;
-    color: #93c5fd;
-    cursor: pointer;
+    background: #1e3a5f; border: 2px dashed #3b82f6; border-radius: 10px;
+    padding: 10px 14px; min-width: 170px; text-align: center;
+    font-size: 0.8rem; color: #93c5fd;
     transition: border-color 0.15s, background 0.15s;
-    position: relative;
-    touch-action: none;
+    position: relative; cursor: pointer;
   }
 
-  .special-seat.drag-over         { border-style: solid; border-color: #60a5fa; background: #1e40af; }
-  .special-seat.drag-over-invalid { border-style: solid; border-color: #dc2626; background: #450a0a; }
-  .special-seat.occupied          { border-style: solid; background: #172554; border-color: #6366f1; color: #c7d2fe; }
+  .special-seat.drag-over          { border-style: solid; border-color: #60a5fa; background: #1e40af; }
+  .special-seat.drag-over-invalid  { border-style: solid; border-color: #dc2626; background: #450a0a; }
+  .special-seat.occupied           { border-style: solid; background: #172554; border-color: #6366f1; color: #c7d2fe; }
+  .special-seat:active             { opacity: 0.8; }
 
   .special-seat .seat-label {
-    font-size: 0.6rem;
-    color: #6366f1;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: block;
-    margin-bottom: 3px;
+    font-size: 0.6rem; color: #6366f1; text-transform: uppercase;
+    letter-spacing: 0.5px; display: block; margin-bottom: 3px;
   }
 
   .special-seat .remove-btn {
@@ -325,46 +240,27 @@
 
   /* ── Seat grid ── */
   .row-header {
-    display: grid;
-    grid-template-columns: 1fr 36px 1fr;
-    align-items: center;
-    margin-bottom: 4px;
-    gap: 4px;
+    display: grid; grid-template-columns: 1fr 36px 1fr;
+    align-items: center; margin-bottom: 4px; gap: 4px;
   }
 
   .row-header span {
-    font-size: 0.62rem;
-    color: #475569;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    font-size: 0.62rem; color: #475569; text-align: center;
+    text-transform: uppercase; letter-spacing: 0.5px;
   }
 
   .seats-grid { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
 
-  .seat-row {
-    display: grid;
-    grid-template-columns: 1fr 36px 1fr;
-    align-items: center;
-    gap: 4px;
-  }
+  .seat-row { display: grid; grid-template-columns: 1fr 36px 1fr; align-items: center; gap: 4px; }
 
   .row-num { font-size: 0.68rem; color: #64748b; text-align: center; font-weight: 700; }
 
   .seat {
-    background: #0f172a;
-    border: 1.5px dashed #334155;
-    border-radius: 8px;
-    padding: 6px 6px;
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: default;
+    background: #0f172a; border: 1.5px dashed #334155; border-radius: 8px;
+    padding: 6px 6px; min-height: 48px; display: flex; align-items: center;
+    justify-content: center; cursor: default;
     transition: border-color 0.15s, background 0.15s;
-    position: relative;
-    text-align: center;
-    touch-action: none;
+    position: relative; text-align: center;
   }
 
   .seat.left-seat  { border-color: #1e40af; }
@@ -374,9 +270,13 @@
   .seat.drag-over.right-seat { border-style: solid; border-color: #ec4899; background: #4a044e; }
   .seat.drag-over-invalid    { border-style: solid !important; border-color: #dc2626 !important; background: #450a0a !important; }
 
-  .seat.occupied { border-style: solid; cursor: grab; }
-  .seat.left-seat.occupied  { border-color: #3b82f6; background: #172554; }
-  .seat.right-seat.occupied { border-color: #ec4899; background: #2d0036; }
+  .seat.occupied { border-style: solid; }
+  .seat.left-seat.occupied  { border-color: #3b82f6; background: #172554; cursor: grab; }
+  .seat.right-seat.occupied { border-color: #ec4899; background: #2d0036; cursor: grab; }
+
+  /* Mobile: seats are tappable */
+  .seat.mobile-tappable { cursor: pointer; }
+  .seat.mobile-tappable:active { opacity: 0.7; }
 
   .seat-name { font-size: 0.75rem; font-weight: 600; color: #f1f5f9; line-height: 1.2; }
   .seat-wt   { font-size: 0.65rem; color: #94a3b8; }
@@ -392,21 +292,14 @@
 
   /* ── Toast ── */
   #toast {
-    position: fixed;
-    bottom: 20px; left: 50%;
+    position: fixed; bottom: 20px; left: 50%;
     transform: translateX(-50%) translateY(60px);
-    background: #7f1d1d;
-    color: #fca5a5;
-    border: 1px solid #dc2626;
-    border-radius: 10px;
-    padding: 10px 20px;
-    font-size: 0.82rem;
-    font-weight: 600;
+    background: #7f1d1d; color: #fca5a5;
+    border: 1px solid #dc2626; border-radius: 10px;
+    padding: 10px 20px; font-size: 0.82rem; font-weight: 600;
     pointer-events: none;
     transition: transform 0.22s ease, opacity 0.22s ease;
-    opacity: 0;
-    z-index: 9998;
-    text-align: center;
+    opacity: 0; z-index: 9998; text-align: center;
     max-width: calc(100vw - 32px);
   }
 
@@ -414,25 +307,18 @@
 
   /* ── Summary ── */
   .summary { display: flex; flex-direction: column; gap: 10px; }
-
   .summary-weights { display: flex; flex-direction: column; gap: 10px; }
 
   .weight-box {
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 13px;
-    border: 1px solid #334155;
-    text-align: center;
-    flex: 1;
+    background: #1e293b; border-radius: 12px; padding: 13px;
+    border: 1px solid #334155; text-align: center; flex: 1;
   }
 
   .weight-box.left  { border-color: #1e40af; }
   .weight-box.right { border-color: #831843; }
-
   .weight-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px; }
   .weight-box.left h3  { color: #60a5fa; }
   .weight-box.right h3 { color: #f472b6; }
-
   .weight-val { font-size: 1.9rem; font-weight: 700; line-height: 1; }
   .weight-box.left .weight-val  { color: #93c5fd; }
   .weight-box.right .weight-val { color: #f9a8d4; }
@@ -440,22 +326,14 @@
   .weight-sub  { font-size: 0.68rem; color: #64748b; margin-top: 3px; }
 
   .balance-box {
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 13px;
-    border: 1px solid #334155;
+    background: #1e293b; border-radius: 12px; padding: 13px; border: 1px solid #334155;
   }
 
   .balance-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 9px; text-align: center; }
 
   .balance-bar-track {
-    background: #0f172a;
-    border-radius: 99px;
-    height: 13px;
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    margin-bottom: 5px;
+    background: #0f172a; border-radius: 99px; height: 13px;
+    width: 100%; overflow: hidden; position: relative; margin-bottom: 5px;
   }
 
   .balance-bar-left  { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #2563eb, #60a5fa); border-radius: 99px; transition: width 0.3s ease; }
@@ -469,66 +347,274 @@
   .diff-bad  { color: #f87171; }
 
   .total-box {
-    background: #1e293b;
-    border-radius: 12px;
-    padding: 11px 14px;
-    border: 1px solid #334155;
-    text-align: center;
+    background: #1e293b; border-radius: 12px; padding: 11px 14px;
+    border: 1px solid #334155; text-align: center;
   }
 
   .total-box h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.5px; color: #94a3b8; margin-bottom: 3px; }
   .total-val { font-size: 1.35rem; font-weight: 700; color: #e2e8f0; }
 
-  /* ── Seat count ── */
   .seat-count { text-align: center; font-size: 0.72rem; color: #64748b; margin-top: 6px; }
 
-  /* ── Bottom actions ── */
   .actions { display: flex; gap: 7px; margin-top: 8px; flex-wrap: wrap; }
   .actions .btn { flex: 1; min-width: 70px; }
-
   .io-area { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
   .io-area .btn { flex: 1; }
 
-  /* ── Touch device: always show remove buttons ── */
-  @media (hover: none) {
-    .seat .remove-btn,
-    .special-seat .remove-btn { opacity: 0.7; }
+  /* ── Unseated section (mobile only, shown below boat) ── */
+  #unseated-section {
+    display: none;
+    width: 100%;
+    max-width: 440px;
+    margin-top: 12px;
   }
+
+  .unseated-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    padding: 0 2px;
+  }
+
+  .unseated-chips {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .unseated-chip {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-left: 3px solid #334155;
+    border-radius: 8px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .unseated-chip.male   { border-left-color: #3b82f6; }
+  .unseated-chip.female { border-left-color: #ec4899; }
+
+  .unseated-chip-info { flex: 1; min-width: 0; }
+  .unseated-chip-name { font-size: 0.85rem; font-weight: 600; color: #f1f5f9; }
+  .unseated-chip-meta { display: flex; align-items: center; gap: 4px; margin-top: 2px; flex-wrap: wrap; }
+  .unseated-chip-wt   { font-size: 0.72rem; color: #64748b; }
+
+  .all-seated-msg {
+    text-align: center;
+    color: #4ade80;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 12px;
+    background: #052e16;
+    border-radius: 10px;
+    border: 1px solid #16a34a;
+  }
+
+  /* ── Mobile seat-selection modal ── */
+  #seat-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+  }
+
+  #seat-modal.open { display: block; }
+
+  #modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(2px);
+  }
+
+  #modal-sheet {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    background: #1e293b;
+    border-radius: 20px 20px 0 0;
+    border-top: 1px solid #334155;
+    padding: 0 0 env(safe-area-inset-bottom, 16px);
+    max-height: 82vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.22s ease;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  .modal-handle {
+    width: 40px; height: 4px;
+    background: #475569; border-radius: 2px;
+    margin: 12px auto 0;
+    flex-shrink: 0;
+  }
+
+  .modal-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px 10px;
+    flex-shrink: 0;
+  }
+
+  .modal-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f1f5f9;
+  }
+
+  .modal-subtitle {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 1px;
+  }
+
+  .modal-close {
+    background: #334155; border: none; color: #94a3b8;
+    width: 30px; height: 30px; border-radius: 50%;
+    font-size: 0.85rem; cursor: pointer; display: flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .modal-search-wrap {
+    padding: 0 16px 10px;
+    flex-shrink: 0;
+  }
+
+  #modal-search {
+    width: 100%;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    color: #f1f5f9;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    outline: none;
+  }
+
+  #modal-search:focus { border-color: #60a5fa; }
+  #modal-search::placeholder { color: #475569; }
+
+  #modal-list {
+    overflow-y: auto;
+    flex: 1;
+    padding: 0 12px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 10px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: background 0.1s;
+    gap: 8px;
+  }
+
+  .modal-option:active { background: #334155; }
+
+  .modal-option.current {
+    background: #052e16;
+    border-color: #16a34a;
+  }
+
+  .modal-option.elsewhere {
+    opacity: 0.7;
+  }
+
+  .modal-opt-left { flex: 1; min-width: 0; }
+  .modal-opt-name { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; display: block; }
+
+  .modal-opt-meta {
+    display: flex; align-items: center; gap: 5px; margin-top: 2px; flex-wrap: wrap;
+  }
+
+  .modal-opt-wt { font-size: 0.72rem; color: #64748b; }
+
+  .modal-tag {
+    font-size: 0.62rem; font-weight: 600; padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .modal-tag.current-tag { background: #14532d; color: #4ade80; }
+  .modal-tag.elsewhere-tag { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+
+  .modal-opt-right { display: flex; gap: 3px; flex-shrink: 0; }
+
+  .modal-clear-btn {
+    margin: 8px 16px 16px;
+    padding: 12px;
+    background: #1a0808;
+    border: 1px solid #7f1d1d;
+    border-radius: 10px;
+    color: #f87171;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    flex-shrink: 0;
+    display: none;
+  }
+
+  .modal-clear-btn:active { background: #450a0a; }
+
+  .modal-empty {
+    text-align: center;
+    color: #475569;
+    font-size: 0.82rem;
+    padding: 24px 0;
+  }
+
+  .modal-divider {
+    font-size: 0.65rem;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 4px 4px;
+  }
+
+  /* ── Desktop only / Mobile only ── */
+  .desktop-only { display: block; }
+  .mobile-only  { display: none; }
 
   /* ── Mobile layout ── */
   @media (max-width: 800px) {
     body { padding: 10px; }
 
-    .layout {
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
+    .layout { grid-template-columns: 1fr; gap: 12px; }
 
-    /* Reorder: Boat → Summary → Roster */
     .boat-wrapper { order: 1; }
     .summary      { order: 2; }
     #roster-panel { order: 3; }
 
-    /* Weights side-by-side on mobile */
     .summary-weights { flex-direction: row; }
-
     .weight-val { font-size: 1.5rem; }
 
-    /* Bigger seats for touch */
     .seat { min-height: 52px; }
-
-    /* Remove roster max-height on mobile — let it expand */
     .roster-list { max-height: none; }
-
-    /* Larger chip padding for touch */
     .paddler-chip { padding: 10px 8px 10px 11px; }
-
     .boat { max-width: 100%; }
+    .seat-row, .row-header { grid-template-columns: 1fr 28px 1fr; }
 
-    /* Row number smaller column */
-    .seat-row, .row-header {
-      grid-template-columns: 1fr 28px 1fr;
-    }
+    /* Show unseated section on mobile */
+    #unseated-section { display: block; }
+
+    .desktop-only { display: none !important; }
+    .mobile-only  { display: block; }
+
+    /* Touch devices: show remove btn on roster chips */
+    .seat .remove-btn { opacity: 0.6; }
   }
 
   @media (max-width: 380px) {
@@ -540,15 +626,41 @@
 <body>
 
 <h1>🌀 Vortex Seating Planner</h1>
-<p class="subtitle">
-  Tap &amp; drag paddlers onto seats &nbsp;·&nbsp;
+<p class="subtitle desktop-only">
+  Drag paddlers onto seats &nbsp;·&nbsp;
   <span style="color:#60a5fa">■ Left</span>&nbsp;
   <span style="color:#f472b6">■ Right</span>&nbsp;
   <span style="color:#a855f7">■ Steer</span>
-  &nbsp;·&nbsp; Badges restrict seat placement
+  &nbsp;·&nbsp; Position badges restrict seat placement
+</p>
+<p class="subtitle mobile-only">
+  Tap any seat to assign a paddler &nbsp;·&nbsp;
+  <span style="color:#60a5fa">■ L</span>&nbsp;
+  <span style="color:#f472b6">■ R</span>&nbsp;
+  <span style="color:#a855f7">■ S</span>
 </p>
 
 <div id="toast"></div>
+
+<!-- ── Mobile seat-selection modal ── -->
+<div id="seat-modal">
+  <div id="modal-overlay" onclick="closeModal()"></div>
+  <div id="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title">Select Paddler</div>
+        <div class="modal-subtitle" id="modal-subtitle"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-search-wrap">
+      <input id="modal-search" type="text" placeholder="Search by name…" oninput="renderModalList()" autocomplete="off" autocorrect="off">
+    </div>
+    <div id="modal-list"></div>
+    <button class="modal-clear-btn" id="modal-clear-btn" onclick="clearModalSeat()">Remove from seat</button>
+  </div>
+</div>
 
 <div class="layout">
 
@@ -558,7 +670,6 @@
       <div class="roster-title-row">
         <span class="panel-title">Paddler Roster</span>
       </div>
-      <!-- Gender stat bar -->
       <div class="gender-stat-bar">
         <div class="gsb-cell male">
           <div class="gsb-val" id="gsb-male">0</div>
@@ -575,7 +686,6 @@
       </div>
     </div>
 
-    <!-- Add paddler form -->
     <div class="add-paddler">
       <input id="inp-name" type="text" placeholder="Name" maxlength="24" autocomplete="off">
       <div style="display:flex;gap:6px;">
@@ -616,10 +726,10 @@
       <div class="special-seat-row">
         <div class="special-seat" id="seat-drummer" data-sid="drummer"
           ondragover="dragOverEl(event,'drummer')" ondragleave="dragLeaveEl(event)"
-          ondrop="dropEl(event,'drummer')">
+          ondrop="dropEl(event,'drummer')" onclick="handleSeatClick('drummer')">
           <span class="seat-label">Drummer (unrestricted)</span>
-          <span class="remove-btn" onclick="removePaddlerFromSeat('drummer')">✕</span>
-          <span class="seat-content">Drop here</span>
+          <span class="remove-btn" onclick="event.stopPropagation();removePaddlerFromSeat('drummer')">✕</span>
+          <span class="seat-content">Tap to assign</span>
         </div>
       </div>
 
@@ -635,14 +745,21 @@
       <div class="special-seat-row">
         <div class="special-seat" id="seat-steerer" data-sid="steerer"
           ondragover="dragOverEl(event,'steerer')" ondragleave="dragLeaveEl(event)"
-          ondrop="dropEl(event,'steerer')">
+          ondrop="dropEl(event,'steerer')" onclick="handleSeatClick('steerer')">
           <span class="seat-label">Steersperson · S position only</span>
-          <span class="remove-btn" onclick="removePaddlerFromSeat('steerer')">✕</span>
-          <span class="seat-content">Drop here</span>
+          <span class="remove-btn" onclick="event.stopPropagation();removePaddlerFromSeat('steerer')">✕</span>
+          <span class="seat-content">Tap to assign</span>
         </div>
       </div>
     </div>
+
     <div class="seat-count" id="seat-count">0 / 20 paddler seats filled</div>
+
+    <!-- Unseated paddlers — mobile only, shown below boat -->
+    <div id="unseated-section">
+      <div class="unseated-title">Not yet seated</div>
+      <div class="unseated-chips" id="unseated-list"></div>
+    </div>
   </div>
 
   <!-- ── Summary ── -->
@@ -724,18 +841,20 @@ function initSeats() {
 }
 initSeats();
 
+function isMobile() { return window.innerWidth <= 800; }
+
 // ── Restriction check ─────────────────────────────────────────────────────
 function canDrop(pid, sid) {
   const p = paddlers.find(x => x.id === pid);
   if (!p || !p.positions || p.positions.length === 0) return true;
-  if (sid === 'drummer')         return true;
-  if (sid === 'steerer')         return p.positions.includes('S');
-  if (sid.startsWith('L'))      return p.positions.includes('L');
-  if (sid.startsWith('R'))      return p.positions.includes('R');
+  if (sid === 'drummer')    return true;
+  if (sid === 'steerer')    return p.positions.includes('S');
+  if (sid.startsWith('L')) return p.positions.includes('L');
+  if (sid.startsWith('R')) return p.positions.includes('R');
   return true;
 }
 
-// ── Core drop handler ─────────────────────────────────────────────────────
+// ── Core drop ─────────────────────────────────────────────────────────────
 function handleDrop(sid) {
   if (!dragId) return;
   if (!canDrop(dragId, sid)) {
@@ -752,6 +871,136 @@ function handleDrop(sid) {
   seats[sid] = dragId;
   dragId = null;
   render();
+}
+
+// ── Seat click — opens modal on mobile, no-op on desktop ─────────────────
+function handleSeatClick(sid) {
+  if (!isMobile()) return;
+  openModal(sid);
+}
+
+// ── Mobile modal ──────────────────────────────────────────────────────────
+let modalSid = null;
+
+function openModal(sid) {
+  modalSid = sid;
+
+  const label = sid === 'drummer'  ? 'Drummer'
+              : sid === 'steerer'  ? 'Steersperson'
+              : sid.startsWith('L') ? `Left · Row ${sid.slice(1)}`
+              : `Right · Row ${sid.slice(1)}`;
+
+  document.getElementById('modal-title').textContent = label;
+
+  const currentPid = seats[sid];
+  const currentP   = paddlers.find(x => x.id === currentPid);
+  document.getElementById('modal-subtitle').textContent =
+    currentP ? `Currently: ${currentP.name}` : 'Empty seat';
+
+  const clearBtn = document.getElementById('modal-clear-btn');
+  clearBtn.style.display = currentPid ? 'block' : 'none';
+
+  document.getElementById('modal-search').value = '';
+  renderModalList();
+
+  document.getElementById('seat-modal').classList.add('open');
+  setTimeout(() => document.getElementById('modal-search').focus(), 300);
+}
+
+function closeModal() {
+  document.getElementById('seat-modal').classList.remove('open');
+  document.getElementById('modal-search').value = '';
+  modalSid = null;
+}
+
+function clearModalSeat() {
+  if (modalSid) { seats[modalSid] = null; }
+  closeModal();
+  render();
+}
+
+function renderModalList() {
+  const q       = document.getElementById('modal-search').value.toLowerCase().trim();
+  const list    = document.getElementById('modal-list');
+  const currentPid = seats[modalSid];
+
+  // All eligible for this seat
+  let eligible = paddlers.filter(p => canDrop(p.id, modalSid));
+  if (q) eligible = eligible.filter(p => p.name.toLowerCase().includes(q));
+
+  list.innerHTML = '';
+
+  if (!eligible.length) {
+    list.innerHTML = '<div class="modal-empty">No eligible paddlers found</div>';
+    return;
+  }
+
+  // Separate: current, available, elsewhere
+  const current   = eligible.filter(p => p.id === currentPid);
+  const available = eligible.filter(p => p.id !== currentPid && !Object.values(seats).includes(p.id));
+  const elsewhere = eligible.filter(p => p.id !== currentPid &&  Object.values(seats).includes(p.id));
+
+  function addDivider(text) {
+    const d = document.createElement('div');
+    d.className = 'modal-divider';
+    d.textContent = text;
+    list.appendChild(d);
+  }
+
+  function addOption(p, cls, tagHTML) {
+    const div = document.createElement('div');
+    div.className = `modal-option ${cls}`;
+    div.innerHTML = `
+      <div class="modal-opt-left">
+        <span class="modal-opt-name">
+          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}" style="display:inline-block;margin-right:4px;vertical-align:middle;"></span>` : ''}
+          ${esc(p.name)}
+        </span>
+        <div class="modal-opt-meta">
+          <span class="modal-opt-wt">${p.weight} kg</span>
+          ${tagHTML}
+        </div>
+      </div>
+      <div class="modal-opt-right">
+        ${(p.positions||[]).map(pos=>`<span class="pos-badge ${pos}">${pos}</span>`).join('')}
+      </div>`;
+
+    div.onclick = () => {
+      if (p.id === currentPid) {
+        // Tap current = deselect
+        seats[modalSid] = null;
+      } else {
+        // Move from elsewhere if needed, assign here
+        Object.keys(seats).forEach(k => { if (seats[k] === p.id) seats[k] = null; });
+        seats[modalSid] = p.id;
+      }
+      closeModal();
+      render();
+    };
+    list.appendChild(div);
+  }
+
+  if (current.length) {
+    addDivider('Currently assigned');
+    current.forEach(p => addOption(p, 'current', '<span class="modal-tag current-tag">✓ here</span>'));
+  }
+
+  if (available.length) {
+    if (current.length) addDivider('Available');
+    available.forEach(p => addOption(p, '', ''));
+  }
+
+  if (elsewhere.length) {
+    addDivider('Seated elsewhere — tap to move');
+    elsewhere.forEach(p => {
+      const atSid = Object.entries(seats).find(([k,v]) => v === p.id)?.[0];
+      const atLabel = !atSid ? '' :
+        atSid === 'drummer'  ? 'Drummer' :
+        atSid === 'steerer'  ? 'Steerer' :
+        atSid.startsWith('L') ? `L${atSid.slice(1)}` : `R${atSid.slice(1)}`;
+      addOption(p, 'elsewhere', `<span class="modal-tag elsewhere-tag">at ${atLabel}</span>`);
+    });
+  }
 }
 
 // ── Toast ─────────────────────────────────────────────────────────────────
@@ -779,13 +1028,22 @@ function renderBoat() {
 
   document.querySelectorAll('.seat[data-sid]').forEach(el => {
     const sid = el.dataset.sid;
+
+    // Desktop: drag events
     el.addEventListener('dragover',  e => { e.preventDefault(); highlightSeat(el, sid); });
-    el.addEventListener('dragleave', e => clearHighlight(el));
+    el.addEventListener('dragleave', () => clearHighlight(el));
     el.addEventListener('drop',      e => { e.preventDefault(); clearHighlight(el); handleDrop(sid); });
     el.addEventListener('dragstart', e => {
       const pid = seats[sid];
       if (pid) { dragId = pid; e.dataTransfer.effectAllowed = 'move'; }
     });
+
+    // Both: click opens modal on mobile, or removes on desktop via remove-btn
+    el.addEventListener('click', e => {
+      if (e.target.classList.contains('remove-btn')) return;
+      if (isMobile()) openModal(sid);
+    });
+
     el.querySelector('.remove-btn')?.addEventListener('click', ev => {
       ev.stopPropagation(); removePaddlerFromSeat(sid);
     });
@@ -798,7 +1056,7 @@ function renderBoat() {
 
 function seatHTML(sid, cls) {
   const p = paddlers.find(x => x.id === seats[sid]);
-  return `<div class="seat ${cls}${p ? ' occupied' : ''}" data-sid="${sid}" draggable="${p ? 'true' : 'false'}">
+  return `<div class="seat ${cls}${p ? ' occupied' : ''} mobile-tappable" data-sid="${sid}" draggable="${p ? 'true' : 'false'}">
     <span class="remove-btn">✕</span>
     ${p ? `<div><div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div></div>`
         : `<span class="seat-empty-label">empty</span>`}
@@ -815,7 +1073,9 @@ function renderSpecialSeat(sid) {
     c.innerHTML = `<div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div>`;
   } else {
     el.classList.remove('occupied');
-    c.textContent = sid === 'steerer' ? 'Drop here (S only)' : 'Drop here';
+    c.textContent = isMobile()
+      ? (sid === 'steerer' ? 'Tap to assign (S only)' : 'Tap to assign')
+      : (sid === 'steerer' ? 'Drop here (S only)' : 'Drop here');
   }
 }
 
@@ -828,23 +1088,12 @@ function clearHighlight(el) {
   el.classList.remove('drag-over', 'drag-over-invalid');
 }
 
-// ── Mouse drag: special seats (inline handlers) ───────────────────────────
-function dragOverEl(e, sid) {
-  e.preventDefault();
-  highlightSeat(e.currentTarget, sid);
-}
+// Desktop drag event handlers for special seats
+function dragOverEl(e, sid) { e.preventDefault(); highlightSeat(e.currentTarget, sid); }
+function dragLeaveEl(e)     { clearHighlight(e.currentTarget); }
+function dropEl(e, sid)     { e.preventDefault(); clearHighlight(e.currentTarget); handleDrop(sid); }
 
-function dragLeaveEl(e) {
-  clearHighlight(e.currentTarget);
-}
-
-function dropEl(e, sid) {
-  e.preventDefault();
-  clearHighlight(e.currentTarget);
-  handleDrop(sid);
-}
-
-// Drop onto roster panel = unassign
+// Drop onto roster = unassign (desktop)
 document.getElementById('roster-panel').addEventListener('dragover', e => e.preventDefault());
 document.getElementById('roster-panel').addEventListener('drop', e => {
   e.preventDefault();
@@ -861,6 +1110,7 @@ function renderRoster() {
   if (!paddlers.length) {
     list.innerHTML = '<div style="color:#475569;font-size:0.8rem;text-align:center;padding:14px;">No paddlers yet</div>';
     updateGenderCounts();
+    renderUnseated();
     return;
   }
   paddlers.forEach(p => {
@@ -868,7 +1118,7 @@ function renderRoster() {
     const gClass   = p.gender === 'M' ? 'male' : p.gender === 'F' ? 'female' : '';
     const div = document.createElement('div');
     div.className = `paddler-chip ${gClass}${isSeated ? ' seated' : ''}`;
-    div.draggable = true;
+    div.draggable = !isMobile();
     div.dataset.pid = p.id;
     div.innerHTML = `
       <div class="chip-left">
@@ -882,16 +1132,49 @@ function renderRoster() {
           ${isSeated ? '<span class="chip-seated-label">✓ seated</span>' : ''}
         </div>
       </div>
-      <button class="btn btn-danger" onclick="event.stopPropagation();deletePaddler('${p.id}')">✕</button>`;
-    div.addEventListener('dragstart', e => {
-      dragId = p.id;
-      div.classList.add('dragging');
-      e.dataTransfer.effectAllowed = 'move';
-    });
-    div.addEventListener('dragend', () => div.classList.remove('dragging'));
+      <button class="btn btn-danger" title="Remove from roster" onclick="event.stopPropagation();deletePaddler('${p.id}')">✕</button>`;
+
+    if (!isMobile()) {
+      div.addEventListener('dragstart', e => {
+        dragId = p.id;
+        div.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      div.addEventListener('dragend', () => div.classList.remove('dragging'));
+    }
     list.appendChild(div);
   });
   updateGenderCounts();
+  renderUnseated();
+}
+
+// ── Render: unseated list (mobile) ────────────────────────────────────────
+function renderUnseated() {
+  const listEl = document.getElementById('unseated-list');
+  if (!listEl) return;
+  const unseated = paddlers.filter(p => !Object.values(seats).includes(p.id));
+  listEl.innerHTML = '';
+  if (!unseated.length && paddlers.length > 0) {
+    listEl.innerHTML = '<div class="all-seated-msg">✓ All paddlers are seated!</div>';
+    return;
+  }
+  unseated.forEach(p => {
+    const gClass = p.gender === 'M' ? 'male' : p.gender === 'F' ? 'female' : '';
+    const div = document.createElement('div');
+    div.className = `unseated-chip ${gClass}`;
+    div.innerHTML = `
+      <div class="unseated-chip-info">
+        <div class="unseated-chip-name">
+          ${p.gender ? `<span class="gender-dot ${p.gender.toLowerCase()}" style="display:inline-block;margin-right:4px;vertical-align:middle;"></span>` : ''}
+          ${esc(p.name)}
+        </div>
+        <div class="unseated-chip-meta">
+          <span class="unseated-chip-wt">${p.weight} kg</span>
+          ${(p.positions||[]).map(pos=>`<span class="pos-badge ${pos}">${pos}</span>`).join('')}
+        </div>
+      </div>`;
+    listEl.appendChild(div);
+  });
 }
 
 function updateGenderCounts() {
@@ -949,7 +1232,7 @@ function addPaddler() {
   const gEl = document.getElementById('inp-gender');
   const name   = nEl.value.trim();
   const weight = parseFloat(wEl.value);
-  if (!name)   { nEl.focus(); return; }
+  if (!name)               { nEl.focus(); return; }
   if (!weight || weight <= 0) { wEl.focus(); return; }
   const positions = ['L','R','S'].filter(k => document.getElementById(`pos-${k}`).checked);
   paddlers.push({ id: uid(), name, weight, gender: gEl.value || '', positions });
@@ -960,8 +1243,10 @@ function addPaddler() {
 }
 
 function deletePaddler(pid) {
+  const p = paddlers.find(x => x.id === pid);
+  if (isMobile() && !confirm(`Remove ${p?.name || 'this paddler'} from the roster?`)) return;
   Object.keys(seats).forEach(k => { if (seats[k] === pid) seats[k] = null; });
-  paddlers = paddlers.filter(p => p.id !== pid);
+  paddlers = paddlers.filter(x => x.id !== pid);
   render();
 }
 
@@ -976,115 +1261,8 @@ function clearSeats() {
 
 function clearAll() {
   if (!confirm('Clear all paddlers and seats?')) return;
-  paddlers = [];
-  initSeats();
-  render();
+  paddlers = []; initSeats(); render();
 }
-
-// ── Touch drag & drop ─────────────────────────────────────────────────────
-let touchGhost     = null;
-let touchOffX      = 0;
-let touchOffY      = 0;
-let touchHighlight = null;
-
-document.addEventListener('touchstart', e => {
-  // Let buttons and remove spans handle their own events
-  if (e.target.closest('button, .remove-btn')) return;
-
-  const chip         = e.target.closest('.paddler-chip[data-pid]');
-  const occupiedSeat = e.target.closest('.seat.occupied[data-sid]');
-  const source       = chip || occupiedSeat;
-  if (!source) return;
-
-  e.preventDefault();
-  dragId = chip ? chip.dataset.pid : seats[occupiedSeat.dataset.sid];
-  if (!dragId) return;
-
-  const rect  = source.getBoundingClientRect();
-  const touch = e.touches[0];
-  touchOffX = touch.clientX - rect.left;
-  touchOffY = touch.clientY - rect.top;
-
-  const ghost = source.cloneNode(true);
-  ghost.removeAttribute('id');
-  Object.assign(ghost.style, {
-    position: 'fixed',
-    left: rect.left + 'px',
-    top:  rect.top  + 'px',
-    width: rect.width + 'px',
-    pointerEvents: 'none',
-    zIndex: '9999',
-    opacity: '0.85',
-    transform: 'scale(1.05)',
-    transition: 'none',
-    boxShadow: '0 8px 28px rgba(0,0,0,0.6)',
-    borderRadius: '8px',
-  });
-  document.body.appendChild(ghost);
-  touchGhost = ghost;
-  touchGhost._src = source;
-  source.style.opacity = '0.25';
-}, { passive: false });
-
-document.addEventListener('touchmove', e => {
-  if (!touchGhost || !dragId) return;
-  e.preventDefault();
-  const touch = e.touches[0];
-  touchGhost.style.left = (touch.clientX - touchOffX) + 'px';
-  touchGhost.style.top  = (touch.clientY - touchOffY) + 'px';
-
-  touchGhost.style.display = 'none';
-  const el = document.elementFromPoint(touch.clientX, touch.clientY);
-  touchGhost.style.display = '';
-
-  const newTarget = el?.closest('.seat[data-sid], .special-seat[data-sid]') || null;
-
-  if (touchHighlight && touchHighlight !== newTarget) {
-    clearHighlight(touchHighlight);
-    touchHighlight = null;
-  }
-  if (newTarget && newTarget !== touchHighlight) {
-    highlightSeat(newTarget, newTarget.dataset.sid);
-    touchHighlight = newTarget;
-  }
-}, { passive: false });
-
-function endTouch(e) {
-  if (!touchGhost || !dragId) return;
-  e.preventDefault();
-
-  const touch = e.changedTouches[0];
-
-  if (touchGhost._src) touchGhost._src.style.opacity = '';
-  touchGhost.remove();
-  touchGhost = null;
-
-  if (touchHighlight) { clearHighlight(touchHighlight); touchHighlight = null; }
-
-  touchGhost?.remove();
-
-  touchGhost = null;
-  const el = document.elementFromPoint(touch.clientX, touch.clientY);
-  const target = el?.closest('.seat[data-sid], .special-seat[data-sid]');
-
-  if (target) {
-    handleDrop(target.dataset.sid);
-  } else if (el?.closest('#roster-panel')) {
-    Object.keys(seats).forEach(k => { if (seats[k] === dragId) seats[k] = null; });
-    dragId = null;
-    render();
-  } else {
-    dragId = null;
-  }
-}
-
-document.addEventListener('touchend',    endTouch, { passive: false });
-document.addEventListener('touchcancel', e => {
-  if (touchGhost?._src) touchGhost._src.style.opacity = '';
-  touchGhost?.remove(); touchGhost = null;
-  if (touchHighlight) { clearHighlight(touchHighlight); touchHighlight = null; }
-  dragId = null;
-});
 
 // ── Persistence ───────────────────────────────────────────────────────────
 function save() {
@@ -1107,20 +1285,17 @@ function exportData() {
 }
 
 function importData(e) {
-  const file = e.target.files[0];
-  if (!file) return;
+  const file = e.target.files[0]; if (!file) return;
   const r = new FileReader();
   r.onload = ev => {
     try {
       const d = JSON.parse(ev.target.result);
-      paddlers = d.paddlers || [];
-      initSeats();
+      paddlers = d.paddlers || []; initSeats();
       seats = { ...seats, ...(d.seats||{}) };
       render(); save();
     } catch { alert('Invalid JSON file'); }
   };
-  r.readAsText(file);
-  e.target.value = '';
+  r.readAsText(file); e.target.value = '';
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────
@@ -1130,6 +1305,9 @@ function render() { renderBoat(); renderRoster(); save(); }
 
 document.getElementById('inp-name').addEventListener('keydown',   e => { if (e.key==='Enter') document.getElementById('inp-weight').focus(); });
 document.getElementById('inp-weight').addEventListener('keydown', e => { if (e.key==='Enter') addPaddler(); });
+
+// Close modal on back button (Android)
+window.addEventListener('popstate', closeModal);
 
 // ── Boot ──────────────────────────────────────────────────────────────────
 if (!load()) paddlers = INITIAL_PADDLERS.map(p => ({ ...p, id: uid() }));
