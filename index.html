@@ -640,6 +640,12 @@
     padding: 6px 12px; cursor: pointer; flex-shrink: 0; touch-action: manipulation;
   }
   .btn-load-cloud:active { background: #1e40af; }
+  .btn-del-cloud {
+    background: none; border: 1px solid #7c2d12; border-radius: 7px;
+    color: #f87171; font-size: 0.78rem; font-weight: 600;
+    padding: 6px 10px; cursor: pointer; flex-shrink: 0; touch-action: manipulation;
+  }
+  .btn-del-cloud:active { background: #7c2d12; }
   .cloud-empty { text-align: center; color: #475569; font-size: 0.85rem; padding: 28px 0; }
   .cloud-status { font-size: 0.8rem; padding: 8px 18px; color: #4ade80; flex-shrink: 0; min-height: 32px; }
 
@@ -998,12 +1004,16 @@ async function refreshCloudList() {
       const t = new Date(p.updated_at);
       const when = t.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' })
                  + ' ' + t.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+      const esc = p.name.replace(/"/g,'&quot;');
       return `<div class="cloud-plan-row">
         <div>
           <div class="cloud-plan-name">${p.name}</div>
           <div class="cloud-plan-time">${when}</div>
         </div>
-        <button class="btn-load-cloud" data-plan="${p.name.replace(/"/g,'&quot;')}" onclick="cloudLoad(this.dataset.plan)">Load</button>
+        <div style="display:flex;gap:6px;">
+          <button class="btn-load-cloud" data-plan="${esc}" onclick="cloudLoad(this.dataset.plan)">Load</button>
+          <button class="btn-del-cloud"  data-plan="${esc}" onclick="cloudDelete(this.dataset.plan)">🗑</button>
+        </div>
       </div>`;
     }).join('');
   } catch(e) {
@@ -1056,6 +1066,22 @@ async function shareAsImage() {
   } finally {
     btn.textContent = '📷 Share Image';
     btn.disabled = false;
+  }
+}
+
+async function cloudDelete(name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  setCloudStatus('Deleting…', '#94a3b8');
+  try {
+    const r = await fetch(`${SB_URL}/plans?name=eq.${encodeURIComponent(name)}`, {
+      method: 'DELETE',
+      headers: sbH()
+    });
+    if (!r.ok) throw new Error(await r.text());
+    setCloudStatus(`"${name}" deleted.`, '#f87171');
+    refreshCloudList();
+  } catch(e) {
+    setCloudStatus('Delete failed: ' + e.message, '#f87171');
   }
 }
 
