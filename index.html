@@ -1057,12 +1057,19 @@ async function shareAsImage() {
       useCORS: true,
       logging: false
     });
-    const link = document.createElement('a');
-    link.download = 'vortex-seating-plan.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
+    const file = new File([blob], 'vortex-seating-plan.png', { type: 'image/png' });
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      await navigator.share({ files: [file], title: 'Vortex Seating Plan' });
+    } else {
+      const link = document.createElement('a');
+      link.download = 'vortex-seating-plan.png';
+      link.href = URL.createObjectURL(blob);
+      link.click();
+      setTimeout(() => URL.revokeObjectURL(link.href), 5000);
+    }
   } catch(e) {
-    alert('Could not capture image: ' + e.message);
+    if (e.name !== 'AbortError') alert('Could not share image: ' + e.message);
   } finally {
     btn.textContent = '📷 Share Image';
     btn.disabled = false;
