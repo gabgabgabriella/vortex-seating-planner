@@ -572,6 +572,77 @@
   .roster-io { display: flex; gap: 8px; }
   .roster-io .btn-sm { flex: 1; }
 
+  /* ── Cloud Plans button ── */
+  .btn-cloud {
+    display: flex; align-items: center; gap: 5px;
+    background: #1a2e1a; border: 1px solid #166534; border-radius: 8px;
+    color: #4ade80; font-size: 0.78rem; font-weight: 600;
+    padding: 7px 12px; cursor: pointer; white-space: nowrap;
+    touch-action: manipulation;
+  }
+  .btn-cloud:active { background: #166534; }
+
+  /* ── Cloud modal ── */
+  #cloud-modal { display: none; position: fixed; inset: 0; z-index: 300; }
+  #cloud-modal.open { display: block; }
+  #cloud-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); }
+  #cloud-sheet {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: #0f172a; border-radius: 20px 20px 0 0;
+    border-top: 1px solid #1e293b;
+    padding: 0 0 env(safe-area-inset-bottom,16px);
+    max-height: 80vh; display: flex; flex-direction: column;
+  }
+  @media (min-width: 801px) {
+    #cloud-sheet {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      bottom: auto; border-radius: 16px; border: 1px solid #1e293b;
+      max-width: 460px; width: 100%;
+    }
+  }
+  .cloud-handle { width: 40px; height: 4px; background: #334155; border-radius: 99px; margin: 12px auto 0; }
+  .cloud-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 18px 12px; border-bottom: 1px solid #1e293b; flex-shrink: 0;
+  }
+  .cloud-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; }
+  .cloud-close { background: #1e293b; border: none; border-radius: 50%; width: 28px; height: 28px; color: #94a3b8; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .cloud-save-row {
+    display: flex; gap: 8px; padding: 14px 18px 10px; flex-shrink: 0;
+    border-bottom: 1px solid #1e293b;
+  }
+  .cloud-save-row input {
+    flex: 1; background: #1e293b; border: 1px solid #334155; border-radius: 8px;
+    color: #f1f5f9; font-size: 0.88rem; padding: 9px 12px; outline: none;
+  }
+  .cloud-save-row input:focus { border-color: #4ade80; }
+  .cloud-save-row .btn-save-cloud {
+    background: #166534; color: #4ade80; border: none; border-radius: 8px;
+    font-size: 0.82rem; font-weight: 700; padding: 9px 14px; cursor: pointer;
+    white-space: nowrap; touch-action: manipulation;
+  }
+  .cloud-save-row .btn-save-cloud:active { background: #14532d; }
+  .cloud-plans-label {
+    font-size: 0.7rem; color: #475569; text-transform: uppercase; letter-spacing: 1px;
+    padding: 12px 18px 6px; flex-shrink: 0;
+  }
+  #cloud-list { overflow-y: auto; flex: 1; padding: 0 18px 16px; }
+  .cloud-plan-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0; border-bottom: 1px solid #1e293b; gap: 10px;
+  }
+  .cloud-plan-row:last-child { border-bottom: none; }
+  .cloud-plan-name { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; }
+  .cloud-plan-time { font-size: 0.72rem; color: #475569; margin-top: 2px; }
+  .btn-load-cloud {
+    background: #1e3a5f; border: 1px solid #1e40af; border-radius: 7px;
+    color: #93c5fd; font-size: 0.78rem; font-weight: 600;
+    padding: 6px 12px; cursor: pointer; flex-shrink: 0; touch-action: manipulation;
+  }
+  .btn-load-cloud:active { background: #1e40af; }
+  .cloud-empty { text-align: center; color: #475569; font-size: 0.85rem; padding: 28px 0; }
+  .cloud-status { font-size: 0.8rem; padding: 8px 18px; color: #4ade80; flex-shrink: 0; min-height: 32px; }
+
   /* ═══════════════════════════════════════════
      RESPONSIVE — MOBILE
   ═══════════════════════════════════════════ */
@@ -626,6 +697,27 @@
 </div>
 
 <!-- ══════════════════════════════════════════
+     CLOUD PLANS MODAL
+══════════════════════════════════════════ -->
+<div id="cloud-modal">
+  <div id="cloud-overlay" onclick="closeCloudModal()"></div>
+  <div id="cloud-sheet">
+    <div class="cloud-handle"></div>
+    <div class="cloud-header">
+      <div class="cloud-title">☁️ Cloud Plans</div>
+      <button class="cloud-close" onclick="closeCloudModal()">✕</button>
+    </div>
+    <div class="cloud-save-row">
+      <input id="cloud-name-input" type="text" placeholder="Plan name (e.g. Race Day Jun 15)" maxlength="60" autocomplete="off" autocorrect="off">
+      <button class="btn-save-cloud" onclick="cloudSave()">Save</button>
+    </div>
+    <div class="cloud-status" id="cloud-status"></div>
+    <div class="cloud-plans-label">Saved Plans</div>
+    <div id="cloud-list"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
      PAGE 1: SEATING PLANNER
 ══════════════════════════════════════════ -->
 <div id="page-planner" class="page active">
@@ -647,7 +739,10 @@
     <div class="roster-panel" id="roster-panel">
       <div class="roster-panel-header">
         <span class="roster-panel-title">Roster</span>
-        <button class="btn-roster-manage" onclick="goToPage('roster')">✏️ Manage</button>
+        <div style="display:flex;gap:6px;">
+          <button class="btn-cloud" onclick="openCloudModal()">☁️ Plans</button>
+          <button class="btn-roster-manage" onclick="goToPage('roster')">✏️ Manage</button>
+        </div>
       </div>
       <div class="gender-stat-bar">
         <div class="gsb-cell male">
@@ -844,6 +939,101 @@ const INITIAL_PADDLERS = [
   { name:'Hei',        weight:90,  gender:'M', positions:['L'] },
   { name:'Beson',      weight:99,  gender:'M', positions:['R'] },
 ];
+
+// ── Supabase ──────────────────────────────────────────────────────────────
+const SB_URL = 'https://gbnhjmjdvzoeqhjvgein.supabase.co/rest/v1';
+const SB_KEY = 'sb_publishable_VtMw_Sktj-zsIEP-UWVg1A_z0UUI5Tf';
+const sbH = (extra = {}) => ({ 'apikey': SB_KEY, 'Content-Type': 'application/json', ...extra });
+
+async function cloudListPlans() {
+  const r = await fetch(`${SB_URL}/plans?select=name,updated_at&order=updated_at.desc`, { headers: sbH() });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function cloudSavePlan(name) {
+  const r = await fetch(`${SB_URL}/plans`, {
+    method: 'POST',
+    headers: sbH({ 'Prefer': 'resolution=merge-duplicates,return=representation' }),
+    body: JSON.stringify({ name, data: { paddlers, seats }, updated_at: new Date().toISOString() })
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+async function cloudLoadPlan(name) {
+  const r = await fetch(`${SB_URL}/plans?name=eq.${encodeURIComponent(name)}&select=data`, { headers: sbH() });
+  if (!r.ok) throw new Error(await r.text());
+  const rows = await r.json();
+  if (!rows.length) throw new Error('Plan not found');
+  return rows[0].data;
+}
+
+function setCloudStatus(msg, color = '#4ade80') {
+  const el = document.getElementById('cloud-status');
+  el.textContent = msg;
+  el.style.color = color;
+}
+
+function openCloudModal() {
+  document.getElementById('cloud-modal').classList.add('open');
+  refreshCloudList();
+}
+function closeCloudModal() {
+  document.getElementById('cloud-modal').classList.remove('open');
+  setCloudStatus('');
+}
+
+async function refreshCloudList() {
+  const list = document.getElementById('cloud-list');
+  list.innerHTML = '<div class="cloud-empty">Loading…</div>';
+  setCloudStatus('');
+  try {
+    const plans = await cloudListPlans();
+    if (!plans.length) { list.innerHTML = '<div class="cloud-empty">No saved plans yet.</div>'; return; }
+    list.innerHTML = plans.map(p => {
+      const t = new Date(p.updated_at);
+      const when = t.toLocaleDateString(undefined, { month:'short', day:'numeric', year:'numeric' })
+                 + ' ' + t.toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+      return `<div class="cloud-plan-row">
+        <div>
+          <div class="cloud-plan-name">${p.name}</div>
+          <div class="cloud-plan-time">${when}</div>
+        </div>
+        <button class="btn-load-cloud" onclick="cloudLoad(${JSON.stringify(p.name)})">Load</button>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    list.innerHTML = '<div class="cloud-empty">Failed to load plans.</div>';
+    setCloudStatus('Error: ' + e.message, '#f87171');
+  }
+}
+
+async function cloudSave() {
+  const name = document.getElementById('cloud-name-input').value.trim();
+  if (!name) { setCloudStatus('Enter a plan name first.', '#fbbf24'); return; }
+  setCloudStatus('Saving…', '#94a3b8');
+  try {
+    await cloudSavePlan(name);
+    setCloudStatus(`"${name}" saved!`);
+    refreshCloudList();
+  } catch(e) {
+    setCloudStatus('Save failed: ' + e.message, '#f87171');
+  }
+}
+
+async function cloudLoad(name) {
+  setCloudStatus('Loading…', '#94a3b8');
+  try {
+    const state = await cloudLoadPlan(name);
+    paddlers = state.paddlers;
+    seats    = state.seats;
+    save();
+    render();
+    setCloudStatus(`"${name}" loaded!`);
+    setTimeout(closeCloudModal, 900);
+  } catch(e) {
+    setCloudStatus('Load failed: ' + e.message, '#f87171');
+  }
+}
 
 // ── State ─────────────────────────────────────────────────────────────────
 let paddlers  = [];
