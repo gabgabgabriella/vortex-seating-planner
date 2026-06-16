@@ -1060,7 +1060,7 @@ async function shareAsImage() {
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     const file = new File([blob], 'vortex-seating-plan.png', { type: 'image/png' });
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], title: 'Vortex Seating Plan' });
+      await navigator.share({ files: [file] });
     } else {
       const link = document.createElement('a');
       link.download = 'vortex-seating-plan.png';
