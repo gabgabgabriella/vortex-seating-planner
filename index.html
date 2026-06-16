@@ -326,8 +326,8 @@
   .seat.drag-over.right-seat  { border-style: solid; border-color: #ec4899; background: #4a044e; }
   .seat.drag-over-invalid     { border-style: solid !important; border-color: #dc2626 !important; background: #450a0a !important; }
   .seat.occupied              { border-style: solid; cursor: grab; }
-  .seat.left-seat.occupied    { border-color: #3b82f6; background: #172554; }
-  .seat.right-seat.occupied   { border-color: #ec4899; background: #2d0036; }
+  .seat.occupied.male         { border-color: #3b82f6; background: #172554; }
+  .seat.occupied.female       { border-color: #ec4899; background: #2d0036; }
   .seat:active                { opacity: 0.75; }
 
   .seat-name { font-size: 0.75rem; font-weight: 600; color: #f1f5f9; line-height: 1.2; }
@@ -1460,7 +1460,8 @@ function renderBoat() {
 
 function seatHTML(sid, cls) {
   const p = paddlers.find(x => x.id === seats[sid]);
-  return `<div class="seat ${cls}${p ? ' occupied' : ''}" data-sid="${sid}" draggable="${p ? 'true' : 'false'}">
+  const gCls = p ? (p.gender === 'M' ? ' male' : p.gender === 'F' ? ' female' : '') : '';
+  return `<div class="seat ${cls}${p ? ' occupied' : ''}${gCls}" data-sid="${sid}" draggable="${p ? 'true' : 'false'}">
     <span class="remove-btn">✕</span>
     ${p ? `<div><div class="seat-name">${esc(p.name)}</div><div class="seat-wt">${p.weight} kg</div></div>` : `<span class="seat-empty-label">empty</span>`}
   </div>`;
