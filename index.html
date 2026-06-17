@@ -1086,13 +1086,23 @@ async function shareAsImage() {
     });
     const blob = await new Promise(res => canvas.toBlob(res, 'image/png'));
     const file = new File([blob], 'vortex-seating-plan.png', { type: 'image/png' });
-    if (navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file] });
-    } else if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
+    const showOverlay = () => {
       const url = URL.createObjectURL(blob);
       document.getElementById('img-preview-img').src = url;
       document.getElementById('img-preview-overlay').classList.add('open');
       setTimeout(() => URL.revokeObjectURL(url), 60000);
+    };
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({ files: [file] });
+      } catch(shareErr) {
+        if (shareErr.name === 'AbortError') return;
+        if (isIOS) showOverlay();
+        else alert('Could not share: ' + shareErr.message);
+      }
+    } else if (isIOS) {
+      showOverlay();
     } else {
       const link = document.createElement('a');
       link.download = 'vortex-seating-plan.png';
@@ -1101,7 +1111,7 @@ async function shareAsImage() {
       setTimeout(() => URL.revokeObjectURL(link.href), 5000);
     }
   } catch(e) {
-    if (e.name !== 'AbortError') alert('Could not share image: ' + e.message);
+    if (e.name !== 'AbortError') alert('Could not capture image: ' + e.message);
   } finally {
     btn.textContent = '📷 Share Image';
     btn.disabled = false;
