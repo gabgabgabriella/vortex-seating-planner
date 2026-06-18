@@ -668,6 +668,57 @@
   }
 
   /* ═══════════════════════════════════════════
+     ROSTER OVERVIEW PAGE
+  ═══════════════════════════════════════════ */
+  .overview-content { padding: 14px 16px 40px; max-width: 680px; margin: 0 auto; }
+
+  .ov-section { margin-bottom: 20px; }
+  .ov-section-title {
+    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; padding: 8px 12px; border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+  }
+  .ov-section-title.fl { background: #1a1040; color: #c4b5fd; }
+  .ov-section-title.fr { background: #1a0a1a; color: #f9a8d4; }
+  .ov-section-title.ml { background: #0f1f3a; color: #93c5fd; }
+  .ov-section-title.mr { background: #0f2a1a; color: #6ee7b7; }
+  .ov-section-title.fx { background: #1a1a0a; color: #fde68a; }
+
+  .ov-list { background: #1e293b; border-radius: 0 0 8px 8px; overflow: hidden; }
+
+  .ov-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-bottom: 1px solid #0f172a;
+    transition: background 0.15s;
+  }
+  .ov-row:last-child { border-bottom: none; }
+  .ov-row.status-unavailable { background: #1c0a0a; }
+  .ov-row.status-drummer     { background: #150d2a; }
+  .ov-row.status-partly      { background: #1c1400; }
+  .ov-row.status-core        { }
+
+  .ov-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .ov-dot.m { background: #3b82f6; }
+  .ov-dot.f { background: #ec4899; }
+
+  .ov-name { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ov-wt   { font-size: 0.75rem; color: #475569; flex-shrink: 0; }
+
+  .ov-status-btns { display: flex; gap: 4px; flex-shrink: 0; }
+  .ov-btn {
+    border-radius: 6px; font-size: 0.68rem; font-weight: 700;
+    padding: 4px 7px; cursor: pointer; border: 1px solid transparent;
+    touch-action: manipulation; white-space: nowrap;
+    background: #0f172a; color: #475569; border-color: #1e293b;
+  }
+  .ov-btn.active-core        { background: #052e16; color: #4ade80; border-color: #166534; }
+  .ov-btn.active-unavailable { background: #450a0a; color: #fca5a5; border-color: #7f1d1d; }
+  .ov-btn.active-drummer     { background: #2e1065; color: #c4b5fd; border-color: #6d28d9; }
+  .ov-btn.active-partly      { background: #431407; color: #fdba74; border-color: #9a3412; }
+
+  .ov-empty { color: #475569; font-size: 0.82rem; padding: 14px 12px; }
+
+  /* ═══════════════════════════════════════════
      RESPONSIVE — MOBILE
   ═══════════════════════════════════════════ */
   @media (max-width: 800px) {
@@ -775,6 +826,7 @@
         <span class="roster-panel-title">Roster</span>
         <div style="display:flex;gap:6px;">
           <button class="btn-cloud" onclick="openCloudModal()">☁️ Plans</button>
+          <button class="btn-roster-manage" onclick="goToPage('overview')">📋 Overview</button>
           <button class="btn-roster-manage" onclick="goToPage('roster')">✏️ Manage</button>
         </div>
       </div>
@@ -946,6 +998,22 @@
 
   </div>
 </div><!-- end #page-roster -->
+
+<!-- ══════════════════════════════════════════
+     PAGE 3: ROSTER OVERVIEW
+══════════════════════════════════════════ -->
+<div id="page-overview" class="page">
+  <div class="top-bar">
+    <button class="btn-back" onclick="goToPage('planner')">← Back</button>
+    <div>
+      <div class="top-bar-title">Roster Overview</div>
+      <div class="top-bar-sub" id="overview-sub"></div>
+    </div>
+    <div style="width:70px"></div>
+  </div>
+  <div class="overview-content" id="overview-content"></div>
+</div><!-- end #page-overview -->
+
 
 <script>
 // ── Initial data ──────────────────────────────────────────────────────────
@@ -1176,10 +1244,68 @@ function goToPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.getElementById(`page-${name}`).classList.add('active');
   window.scrollTo(0, 0);
-  if (name === 'roster') {
-    cancelEdit();
-    renderMgmtList();
+  if (name === 'roster')    { cancelEdit(); renderMgmtList(); }
+  if (name === 'overview')  { renderOverview(); }
+}
+
+// ── Roster Overview ───────────────────────────────────────────────────────
+const STATUS_LABELS = { core:'Core', unavailable:'Unavail', drummer:'Drummer', partly:'Partly' };
+const STATUS_CYCLE  = ['core','unavailable','drummer','partly'];
+
+function setStatus(id, status) {
+  const p = paddlers.find(x => x.id === id);
+  if (p) { p.status = status; save(); renderOverview(); }
+}
+
+function renderOverview() {
+  const groups = [
+    { key:'fl', label:'Female · Left',  gender:'F', sides:['L'] },
+    { key:'fr', label:'Female · Right', gender:'F', sides:['R'] },
+    { key:'fx', label:'Female · Flex',  gender:'F', sides:['L','R'], both:true },
+    { key:'ml', label:'Male · Left',    gender:'M', sides:['L'] },
+    { key:'mr', label:'Male · Right',   gender:'M', sides:['R'] },
+    { key:'fx2',label:'Male · Flex',    gender:'M', sides:['L','R'], both:true },
+  ];
+
+  const counts = { core:0, unavailable:0, drummer:0, partly:0 };
+
+  function matches(p, g) {
+    if (p.gender !== g.gender) return false;
+    const pos = p.positions || [];
+    if (g.both) return pos.includes('L') && pos.includes('R');
+    if (g.sides.length === 1) return pos.includes(g.sides[0]) && !(pos.includes('L') && pos.includes('R'));
+    return false;
   }
+
+  const html = groups.map(g => {
+    const members = paddlers.filter(p => matches(p, g));
+    if (!members.length) return '';
+    const rows = members.map(p => {
+      const st = p.status || 'core';
+      counts[st] = (counts[st] || 0) + 1;
+      const gDot = p.gender === 'M' ? 'm' : 'f';
+      const btns = STATUS_CYCLE.map(s =>
+        `<button class="ov-btn${st===s?' active-'+s:''}" onclick="setStatus('${p.id}','${s}')">${STATUS_LABELS[s]}</button>`
+      ).join('');
+      return `<div class="ov-row status-${st}">
+        <div class="ov-dot ${gDot}"></div>
+        <div class="ov-name">${esc(p.name)}</div>
+        <div class="ov-wt">${p.weight}kg</div>
+        <div class="ov-status-btns">${btns}</div>
+      </div>`;
+    }).join('');
+    const keyClass = g.key.startsWith('f') ? (g.both ? 'fx' : g.key) : (g.both ? 'fx' : g.key);
+    return `<div class="ov-section">
+      <div class="ov-section-title ${keyClass}">${g.label} <span style="opacity:0.6">(${members.length})</span></div>
+      <div class="ov-list">${rows}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('overview-content').innerHTML = html || '<div class="ov-empty">No paddlers yet.</div>';
+
+  const avail = paddlers.length - (counts.unavailable || 0);
+  document.getElementById('overview-sub').textContent =
+    `${avail} available · ${counts.unavailable||0} unavailable · ${counts.drummer||0} drummer · ${counts.partly||0} partly`;
 }
 
 // ── Position check ────────────────────────────────────────────────────────
