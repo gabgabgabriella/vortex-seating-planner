@@ -670,53 +670,69 @@
   /* ═══════════════════════════════════════════
      ROSTER OVERVIEW PAGE
   ═══════════════════════════════════════════ */
-  .overview-content { padding: 14px 16px 40px; max-width: 680px; margin: 0 auto; }
+  .overview-content { padding: 14px 16px 40px; max-width: 900px; margin: 0 auto; }
 
-  .ov-section { margin-bottom: 20px; }
-  .ov-section-title {
-    font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
-    letter-spacing: 1px; padding: 8px 12px; border-radius: 8px 8px 0 0;
-    margin-bottom: 0;
-  }
-  .ov-section-title.fl { background: #1a1040; color: #c4b5fd; }
-  .ov-section-title.fr { background: #1a0a1a; color: #f9a8d4; }
-  .ov-section-title.ml { background: #0f1f3a; color: #93c5fd; }
-  .ov-section-title.mr { background: #0f2a1a; color: #6ee7b7; }
-  .ov-section-title.fx { background: #1a1a0a; color: #fde68a; }
+  /* Two-column layout */
+  .ov-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .ov-col { background: #1e293b; border-radius: 12px; border: 2px dashed #334155; min-height: 80px; transition: border-color 0.15s, background 0.15s; }
+  .ov-col-L { border-color: #1e40af; }
+  .ov-col-R { border-color: #831843; }
+  .ov-col.drag-over { border-style: solid; }
+  .ov-col-L.drag-over { border-color: #3b82f6; background: #0f1f3a; }
+  .ov-col-R.drag-over { border-color: #ec4899; background: #1a0a1a; }
 
-  .ov-list { background: #1e293b; border-radius: 0 0 8px 8px; overflow: hidden; }
+  .ov-col-header { padding: 9px 13px 7px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #334155; border-radius: 10px 10px 0 0; }
+  .ov-col-L .ov-col-header { color: #60a5fa; background: #0f1f3a; }
+  .ov-col-R .ov-col-header { color: #f472b6; background: #1a0a1a; }
 
-  .ov-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 12px; border-bottom: 1px solid #0f172a;
-    transition: background 0.15s;
-  }
+  .ov-drop-hint { text-align: center; color: #334155; font-size: 0.72rem; padding: 16px 8px; }
+
+  /* Paddler rows in columns */
+  .ov-row { padding: 8px 11px; border-bottom: 1px solid #0f172a; transition: background 0.15s; }
   .ov-row:last-child { border-bottom: none; }
   .ov-row.status-unavailable { background: #1c0a0a; }
   .ov-row.status-drummer     { background: #150d2a; }
   .ov-row.status-partly      { background: #1c1400; }
-  .ov-row.status-core        { }
 
-  .ov-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .ov-row-top { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+  .ov-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .ov-dot.m { background: #3b82f6; }
   .ov-dot.f { background: #ec4899; }
+  .ov-name { font-size: 0.83rem; font-weight: 600; color: #f1f5f9; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ov-wt   { font-size: 0.7rem; color: #475569; flex-shrink: 0; }
+  .ov-unassign { background: none; border: 1px solid #334155; border-radius: 4px; color: #64748b; font-size: 0.62rem; padding: 2px 5px; cursor: pointer; flex-shrink: 0; touch-action: manipulation; }
+  .ov-unassign:active { background: #334155; }
 
-  .ov-name { font-size: 0.9rem; font-weight: 600; color: #f1f5f9; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .ov-wt   { font-size: 0.75rem; color: #475569; flex-shrink: 0; }
-
-  .ov-status-btns { display: flex; gap: 4px; flex-shrink: 0; }
-  .ov-btn {
-    border-radius: 6px; font-size: 0.68rem; font-weight: 700;
-    padding: 4px 7px; cursor: pointer; border: 1px solid transparent;
-    touch-action: manipulation; white-space: nowrap;
-    background: #0f172a; color: #475569; border-color: #1e293b;
-  }
+  .ov-row-btns { display: flex; gap: 3px; }
+  .ov-btn { border-radius: 5px; font-size: 0.62rem; font-weight: 700; padding: 3px 5px; cursor: pointer; border: 1px solid #1e293b; touch-action: manipulation; background: #0f172a; color: #475569; flex: 1; text-align: center; }
   .ov-btn.active-core        { background: #052e16; color: #4ade80; border-color: #166534; }
   .ov-btn.active-unavailable { background: #450a0a; color: #fca5a5; border-color: #7f1d1d; }
   .ov-btn.active-drummer     { background: #2e1065; color: #c4b5fd; border-color: #6d28d9; }
   .ov-btn.active-partly      { background: #431407; color: #fdba74; border-color: #9a3412; }
 
+  /* Flex pool */
+  .ov-flex-section { background: #1e293b; border-radius: 12px; border: 2px dashed #92400e; margin-bottom: 14px; transition: border-color 0.15s, background 0.15s; }
+  .ov-flex-section.drag-over { border-color: #fbbf24; background: #1c1400; }
+  .ov-flex-header { padding: 9px 13px 7px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #fde68a; border-bottom: 1px solid #334155; }
+  .ov-flex-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 10px 12px; }
+  .ov-flex-empty { color: #475569; font-size: 0.78rem; padding: 12px 13px; }
+
+  .ov-flex-chip { background: #0f172a; border: 1px solid #92400e; border-radius: 10px; padding: 8px 10px; cursor: grab; user-select: none; min-width: 120px; }
+  .ov-flex-chip.dragging { opacity: 0.3; }
+  .ov-flex-chip-top { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+  .ov-flex-chip-name { font-size: 0.83rem; font-weight: 600; color: #f1f5f9; flex: 1; }
+  .ov-flex-chip-wt { font-size: 0.7rem; color: #475569; }
+  .ov-flex-assign { display: flex; gap: 4px; margin-bottom: 5px; }
+  .ov-asgn { border-radius: 5px; font-size: 0.68rem; font-weight: 700; padding: 3px 8px; cursor: pointer; border: 1px solid transparent; touch-action: manipulation; flex: 1; text-align: center; }
+  .ov-asgn-L { background: #0f1f3a; color: #60a5fa; border-color: #1e40af; }
+  .ov-asgn-L:active { background: #1e3a5f; }
+  .ov-asgn-R { background: #1a0a1a; color: #f472b6; border-color: #831843; }
+  .ov-asgn-R:active { background: #2d0036; }
+  .ov-flex-status { display: flex; gap: 3px; }
+
   .ov-empty { color: #475569; font-size: 0.82rem; padding: 14px 12px; }
+
+  @media (max-width: 560px) { .ov-two-col { grid-template-columns: 1fr; } }
 
   /* ═══════════════════════════════════════════
      RESPONSIVE — MOBILE
@@ -1257,51 +1273,123 @@ function setStatus(id, status) {
   if (p) { p.status = status; save(); renderOverview(); }
 }
 
-function renderOverview() {
-  const groups = [
-    { key:'fl', label:'Female · Left',  gender:'F', sides:['L'] },
-    { key:'fr', label:'Female · Right', gender:'F', sides:['R'] },
-    { key:'fx', label:'Female · Flex',  gender:'F', sides:['L','R'], both:true },
-    { key:'ml', label:'Male · Left',    gender:'M', sides:['L'] },
-    { key:'mr', label:'Male · Right',   gender:'M', sides:['R'] },
-    { key:'fx2',label:'Male · Flex',    gender:'M', sides:['L','R'], both:true },
-  ];
+let ovDragId = null;
 
+function isFlexPaddler(p) {
+  const pos = p.positions || [];
+  return pos.includes('L') && pos.includes('R');
+}
+
+function assignFlexSide(id, side) {
+  const p = paddlers.find(x => x.id === id);
+  if (p) { p.sideAssign = side; save(); renderOverview(); }
+}
+
+function ovDragStart(e, id) {
+  ovDragId = id;
+  e.dataTransfer.effectAllowed = 'move';
+  setTimeout(() => {
+    const el = document.querySelector(`.ov-flex-chip[data-id="${id}"]`);
+    if (el) el.classList.add('dragging');
+  }, 0);
+}
+
+function ovDragEnd(id) {
+  const el = document.querySelector(`.ov-flex-chip[data-id="${id}"]`);
+  if (el) el.classList.remove('dragging');
+  document.querySelectorAll('.ov-col, .ov-flex-section').forEach(z => z.classList.remove('drag-over'));
+}
+
+function ovDragOver(e, zone) {
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  document.querySelectorAll('.ov-col, .ov-flex-section').forEach(z => z.classList.remove('drag-over'));
+  document.getElementById(zone).classList.add('drag-over');
+}
+
+function ovDrop(e, side) {
+  e.preventDefault();
+  document.querySelectorAll('.ov-col, .ov-flex-section').forEach(z => z.classList.remove('drag-over'));
+  if (ovDragId) { assignFlexSide(ovDragId, side); ovDragId = null; }
+}
+
+function ovRowHTML(p) {
+  const st  = p.status || 'core';
+  const dot = p.gender === 'M' ? 'm' : 'f';
+  const btns = STATUS_CYCLE.map(s =>
+    `<button class="ov-btn${st===s?' active-'+s:''}" onclick="setStatus('${p.id}','${s}')">${STATUS_LABELS[s]}</button>`
+  ).join('');
+  const unassign = isFlexPaddler(p)
+    ? `<button class="ov-unassign" onclick="assignFlexSide('${p.id}',null)" title="Back to flex pool">↩</button>` : '';
+  return `<div class="ov-row status-${st}">
+    <div class="ov-row-top">
+      <div class="ov-dot ${dot}"></div>
+      <div class="ov-name">${esc(p.name)}</div>
+      <div class="ov-wt">${p.weight}kg</div>
+      ${unassign}
+    </div>
+    <div class="ov-row-btns">${btns}</div>
+  </div>`;
+}
+
+function renderOverview() {
   const counts = { core:0, unavailable:0, drummer:0, partly:0 };
 
-  function matches(p, g) {
-    if (p.gender !== g.gender) return false;
-    const pos = p.positions || [];
-    if (g.both) return pos.includes('L') && pos.includes('R');
-    if (g.sides.length === 1) return pos.includes(g.sides[0]) && !(pos.includes('L') && pos.includes('R'));
-    return false;
-  }
+  const leftFixed  = paddlers.filter(p => !isFlexPaddler(p) && (p.positions||[]).includes('L') && !(p.positions||[]).includes('R'));
+  const rightFixed = paddlers.filter(p => !isFlexPaddler(p) && (p.positions||[]).includes('R') && !(p.positions||[]).includes('L'));
+  const flexAll    = paddlers.filter(p => isFlexPaddler(p));
+  const flexL      = flexAll.filter(p => p.sideAssign === 'L');
+  const flexR      = flexAll.filter(p => p.sideAssign === 'R');
+  const flexPool   = flexAll.filter(p => !p.sideAssign);
 
-  const html = groups.map(g => {
-    const members = paddlers.filter(p => matches(p, g));
-    if (!members.length) return '';
-    const rows = members.map(p => {
-      const st = p.status || 'core';
-      counts[st] = (counts[st] || 0) + 1;
-      const gDot = p.gender === 'M' ? 'm' : 'f';
-      const btns = STATUS_CYCLE.map(s =>
-        `<button class="ov-btn${st===s?' active-'+s:''}" onclick="setStatus('${p.id}','${s}')">${STATUS_LABELS[s]}</button>`
-      ).join('');
-      return `<div class="ov-row status-${st}">
-        <div class="ov-dot ${gDot}"></div>
-        <div class="ov-name">${esc(p.name)}</div>
-        <div class="ov-wt">${p.weight}kg</div>
-        <div class="ov-status-btns">${btns}</div>
-      </div>`;
-    }).join('');
-    const keyClass = g.key.startsWith('f') ? (g.both ? 'fx' : g.key) : (g.both ? 'fx' : g.key);
-    return `<div class="ov-section">
-      <div class="ov-section-title ${keyClass}">${g.label} <span style="opacity:0.6">(${members.length})</span></div>
-      <div class="ov-list">${rows}</div>
+  [...leftFixed, ...rightFixed, ...flexAll].forEach(p => {
+    const st = p.status || 'core';
+    counts[st] = (counts[st] || 0) + 1;
+  });
+
+  const colRows = (list) => list.length
+    ? list.map(ovRowHTML).join('')
+    : `<div class="ov-drop-hint">Drop flex paddlers here</div>`;
+
+  const flexChips = flexPool.map(p => {
+    const dot  = p.gender === 'M' ? 'm' : 'f';
+    const st   = p.status || 'core';
+    const btns = STATUS_CYCLE.map(s =>
+      `<button class="ov-btn${st===s?' active-'+s:''}" onclick="setStatus('${p.id}','${s}')">${STATUS_LABELS[s]}</button>`
+    ).join('');
+    return `<div class="ov-flex-chip" data-id="${p.id}" draggable="true"
+      ondragstart="ovDragStart(event,'${p.id}')" ondragend="ovDragEnd('${p.id}')">
+      <div class="ov-flex-chip-top">
+        <div class="ov-dot ${dot}"></div>
+        <div class="ov-flex-chip-name">${esc(p.name)}</div>
+        <div class="ov-flex-chip-wt">${p.weight}kg</div>
+      </div>
+      <div class="ov-flex-assign">
+        <button class="ov-asgn ov-asgn-L" onclick="assignFlexSide('${p.id}','L')">← Left</button>
+        <button class="ov-asgn ov-asgn-R" onclick="assignFlexSide('${p.id}','R')">Right →</button>
+      </div>
+      <div class="ov-flex-status">${btns}</div>
     </div>`;
   }).join('');
 
-  document.getElementById('overview-content').innerHTML = html || '<div class="ov-empty">No paddlers yet.</div>';
+  document.getElementById('overview-content').innerHTML = `
+    <div class="ov-two-col">
+      <div class="ov-col ov-col-L" id="ov-col-L"
+        ondragover="ovDragOver(event,'ov-col-L')" ondrop="ovDrop(event,'L')">
+        <div class="ov-col-header">◀ Left Side (${leftFixed.length + flexL.length})</div>
+        ${colRows([...leftFixed, ...flexL])}
+      </div>
+      <div class="ov-col ov-col-R" id="ov-col-R"
+        ondragover="ovDragOver(event,'ov-col-R')" ondrop="ovDrop(event,'R')">
+        <div class="ov-col-header">Right Side ▶ (${rightFixed.length + flexR.length})</div>
+        ${colRows([...rightFixed, ...flexR])}
+      </div>
+    </div>
+    <div class="ov-flex-section" id="ov-flex-pool"
+      ondragover="ovDragOver(event,'ov-flex-pool')" ondrop="ovDrop(event,null)">
+      <div class="ov-flex-header">⇄ Flex Paddlers — drag or tap ← Left / Right → to assign (${flexPool.length} unassigned)</div>
+      ${flexPool.length ? `<div class="ov-flex-chips">${flexChips}</div>` : '<div class="ov-flex-empty">All flex paddlers assigned ✓</div>'}
+    </div>`;
 
   const avail = paddlers.length - (counts.unavailable || 0);
   document.getElementById('overview-sub').textContent =
